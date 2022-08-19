@@ -14,7 +14,8 @@ dialogRoutes.route('/dialogs').get(async (_req, res) =>{
       res.json(dialogs);
     }
     catch (error) {
-        res.status(400).send('Error fetching listings!');
+        console.log(error)
+        res.status(400).send({error: "Error fetching dialogs"});
     }
 
 });

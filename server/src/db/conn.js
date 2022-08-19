@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
-connectionString = process.env.ATLAS_URI;
+const connectionString = process.env.MONGO_URL;
+
 
 const client = new MongoClient(connectionString, {
     useNewUrlParser: true,
@@ -9,15 +10,18 @@ const client = new MongoClient(connectionString, {
 let dbConnection;
 
 module.exports = {
-    connectToServer: (callback) => {
-      client.connect((err, db)=>{
-        if(err || !db){
-            return callback(err);
-        }
-        dbConnection = db.db('drama_echo');
-        console.log('Connected to MongoDB');
-        return callback();
-      });
-    },
-    getDb: () => dbConnection
+    connect: () => new Promise((resolve, reject)=>{
+        client.connect((err, db)=>{
+            if(err || !db){
+                throw new Error(err);
+            }
+            else{
+                dbConnection = db.db("drama_echo");
+                console.log("Connected to MongoDB");
+                resolve();
+            }
+        })
+    }),
+    getDb: () => dbConnection,
+    close: () => client.close()
 };

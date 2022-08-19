@@ -12,13 +12,17 @@ app.use(cors());
 app.use(express.json());
 app.use(require('./src/api-routes/dialogs'));
 
-
-dbo.connectToServer((err)=>{
-    if(err){
+const startServer = async () => {
+    try {
+        await dbo.connect();
+    }
+    catch (err){
         console.log(err);
         process.exit();
     }
     app.listen(PORT, () => {
         console.log('Running on port: ', PORT);
     });
-});
+}
+startServer();
+
