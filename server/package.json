@@ -1,0 +1,24 @@
+{
+  "name": "drama_echo_server",
+  "version": "0.0.1",
+  "description": "An app that helps you practice drama readings in your second langauge. (Server)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node sever.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier --single-quote --check"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "prettier": "^2.7.1"
+  }
+}
