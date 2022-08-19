@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "jest --runInBand",
     "lint": "eslint .",
-    "format": "prettier --single-quote --check"
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
