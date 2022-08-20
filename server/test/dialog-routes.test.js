@@ -4,7 +4,6 @@ const request = require("supertest");
 const express = require("express");
 const app = express();
 
-const { MongoClient } = require("mongodb");
 const dbo = require("../src/db/conn");
 
 const dbSeeds = require("./db-seeds");
