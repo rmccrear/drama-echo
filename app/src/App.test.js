@@ -1,10 +1,21 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import App from "./App";
 
-test("renders learn react link", async () => {
-  render(<App />);
-  const linkElement = await screen.findByText(/learn react/i);
+test("renders Home route", async () => {
+  render(<App />, { wrapper: BrowserRouter });
+  const linkElement = await screen.findByText(/Get Started/i);
   expect(linkElement).toBeInTheDocument();
-  const dialog1Element = await screen.findByText(/First Dialog/);
-  expect(dialog1Element).toBeInTheDocument();
+});
+
+test("renders DialogList route", async () => {
+  render(
+    <MemoryRouter initialEntries={["/dialogs"]}>
+      <App />
+    </MemoryRouter>
+  );
+  const myDialogsLink = await screen.findByText(/My Dialogs/);
+  expect(myDialogsLink).toBeInTheDocument();
+  const dialogElement = await screen.findByText(/First Dialog/);
+  expect(dialogElement).toBeInTheDocument();
 });
