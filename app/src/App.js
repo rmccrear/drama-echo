@@ -6,7 +6,19 @@ import logo from "./logo.svg";
 
 import "./App.scss";
 
+import DialogListing from "./DialogListing";
+
+import { fetchUser } from "./models/user";
+
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { user: null };
+  }
+  componentDidMount() {
+    const user = fetchUser();
+    this.setState({ ...this.state, user });
+  }
   render() {
     return (
       <div className="App">
@@ -25,6 +37,9 @@ class App extends React.Component {
           </a>
           <Button variant="info"> OK </Button>
         </header>
+        <section>
+          {this.state.user ? <DialogListing user={this.state.user} /> : ""}
+        </section>
       </div>
     );
   }
