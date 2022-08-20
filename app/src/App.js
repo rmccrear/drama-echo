@@ -7,18 +7,10 @@ import logo from "./logo.svg";
 import "./App.scss";
 
 import DialogListing from "./DialogListing";
-
-import { fetchUser } from "./models/user";
+import withAuth from "./withAuth";
+const DialogListingWithAuth = withAuth(DialogListing);
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { user: null };
-  }
-  componentDidMount() {
-    const user = fetchUser();
-    this.setState({ ...this.state, user });
-  }
   render() {
     return (
       <div className="App">
@@ -38,7 +30,7 @@ class App extends React.Component {
           <Button variant="info"> OK </Button>
         </header>
         <section>
-          {this.state.user ? <DialogListing user={this.state.user} /> : ""}
+          <DialogListingWithAuth />
         </section>
       </div>
     );
