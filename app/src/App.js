@@ -1,6 +1,10 @@
 import React from "react";
+
+import Button from "react-bootstrap/Button";
+
 import logo from "./logo.svg";
-import "./App.css";
+
+import "./App.scss";
 
 class App extends React.Component {
   render() {
@@ -19,6 +23,7 @@ class App extends React.Component {
           >
             Learn React
           </a>
+          <Button variant="info"> OK </Button>
         </header>
       </div>
     );
