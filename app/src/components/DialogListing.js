@@ -5,7 +5,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 
 import "./DialogListing.scss";
 
-import { fetchDialogsForUser } from "./models/dialogs";
+import { fetchDialogsForUser } from "../models/dialogs";
 
 class DialogItem extends React.Component {
   render() {

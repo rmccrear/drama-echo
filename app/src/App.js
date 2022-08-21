@@ -7,13 +7,11 @@ import logo from "./logo.svg";
 
 import "./App.scss";
 
-import TopNav from "./TopNav";
+import TopNav from "./components/TopNav";
 import Home from "./routes/home";
-
-import DialogListing from "./DialogListing";
+import DialogRoute from "./routes/dialogs";
 import withAuth from "./withAuth";
 
-const DialogListingWithAuth = withAuth(DialogListing);
 const TopNavWithAuth = withAuth(TopNav);
 
 class App extends React.Component {
@@ -23,7 +21,7 @@ class App extends React.Component {
         <TopNavWithAuth />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="dialogs" element={<DialogListingWithAuth />} />
+          <Route path="dialogs" element={<DialogRoute />} />
         </Routes>
       </div>
     );
