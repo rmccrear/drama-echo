@@ -15,8 +15,7 @@ class TopNav extends React.Component {
           </Navbar.Brand>
           <Navbar.Collapse>
             <Nav as={Link} to="dialogs">
-              {" "}
-              My Dialogs{" "}
+              My Dialogs
             </Nav>
           </Navbar.Collapse>
         </Container>

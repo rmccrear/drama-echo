@@ -2,6 +2,8 @@ import React from "react";
 
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
+import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 import "./DialogListing.scss";
 
@@ -9,7 +11,12 @@ import { fetchDialogsForUser } from "../models/dialogs";
 
 class DialogItem extends React.Component {
   render() {
-    return <ListGroup.Item>{this.props.dialog.title}</ListGroup.Item>;
+    const dialog = this.props.dialog;
+    return (
+      <ListGroup.Item as={Link} to={`/dialogs/${dialog._id}`}>
+        {this.props.dialog.title}
+      </ListGroup.Item>
+    );
   }
 }
 
@@ -32,6 +39,12 @@ class DialogListing extends React.Component {
               {this.state.dialogs.map((dialog) => (
                 <DialogItem key={dialog._id} dialog={dialog} />
               ))}
+              <ListGroup.Item>
+                New
+                <Button as={Link} to="/dialogs/new">
+                  +
+                </Button>
+              </ListGroup.Item>
             </ListGroup>
           </Card.Body>
         </Card>
