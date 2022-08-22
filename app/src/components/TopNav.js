@@ -2,6 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import AuthNavBar from "./AuthNavBar";
 
 import { Switch, Route, Link } from "react-router-dom";
 
@@ -14,8 +15,11 @@ class TopNav extends React.Component {
             Drama Echo
           </Navbar.Brand>
           <Navbar.Collapse>
-            <Nav as={Link} to="dialogs">
-              My Dialogs
+            <Nav>
+              <Nav.Link as={Link} to="dialogs">
+                My Dialogs
+              </Nav.Link>
+              <AuthNavBar />
             </Nav>
           </Navbar.Collapse>
         </Container>

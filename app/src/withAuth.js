@@ -2,21 +2,25 @@ import React from "react";
 
 import { fetchUser } from "./models/user";
 
-const withAuth = (Comp) => {
-  return class extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { user: null };
-    }
-    async componentDidMount() {
-      const user = await fetchUser();
-      this.setState({ user });
-    }
-    render() {
-      const props = { ...this.props, user: this.state.user };
-      return this.state.user ? <Comp {...props} /> : "";
-    }
+import { useAuth0 } from "@auth0/auth0-react";
+
+const withAuthDev = (Component) => {
+  return (props) => {
+    const user = fetchUser();
+    return <Component {...props} user={user} />;
   };
 };
 
-export default withAuth;
+const withAuth = (Component) => {
+  return (props) => {
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    console.log("user: ", user);
+    return !isAuthenticated || isLoading ? (
+      ""
+    ) : (
+      <Component {...props} user={{ ...user, _id: user.sub }} />
+    );
+  };
+};
+
+export default withAuthDev;
