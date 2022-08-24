@@ -4,7 +4,7 @@ const dialogRoutes = express.Router();
 
 const dbo = require("../db/conn");
 
-dialogRoutes.route("/dialogs").get(async (_req, res) => {
+dialogRoutes.route("/api/v1/dialogs").get(async (_req, res) => {
   const db = dbo.getDb();
   try {
     const cursor = await db.collection("dialogs").find({}).limit(20);

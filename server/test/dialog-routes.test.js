@@ -24,7 +24,7 @@ describe("get Dialogs", () => {
   });
 
   test("dialog route works", async () => {
-    const resp = await request(app).get("/dialogs");
+    const resp = await request(app).get("/api/v1/dialogs");
     expect(resp.body[0].title).toBe("First Dialog");
     expect(resp.body[1].title).toBe("Second Dialog");
   });

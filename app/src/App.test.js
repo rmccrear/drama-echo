@@ -2,6 +2,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import App from "./App";
 
+jest.mock("./withAuth");
+
 test("renders Home route", async () => {
   render(<App />, { wrapper: BrowserRouter });
   const linkElement = await screen.findByText(/Get Started/i);
