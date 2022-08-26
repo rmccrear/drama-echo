@@ -3,9 +3,7 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const cors = require("cors");
 
-// Auth0
-const jwt = require('express-jwt').expressjwt;
-const jwks = require('jwks-rsa');
+const {jwtCheck} = require("./src/my-auth");
 
 // get MongoDB driver connection
 const dbo = require("./src/db/conn");
@@ -15,8 +13,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(require("./src/api-routes/dialogs"));
-
+/*
 const jwksUri=process.env.JWKS_URI;
 const issuer=process.env.JWT_ISSUER;
 const audience=process.env.JWT_AUDIENCE;
@@ -33,8 +30,13 @@ var jwtCheck = jwt({
     issuer: issuer,
     algorithms: ['RS256']
 });
+*/
+
+const dialogRoutes = require("./src/api-routes/dialogs")
+app.use(dialogRoutes);
 
 app.get("/api/v1/my-profile", jwtCheck, function(req, res){
+    console.log(req.auth)
     return res.json({message: "OK", username: req.auth.nickname});
 })
 

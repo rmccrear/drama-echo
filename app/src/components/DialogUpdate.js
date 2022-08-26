@@ -3,7 +3,8 @@ import Card from "react-bootstrap/Card";
 
 import DialogForm from "./DialogForm";
 import withParams from "../withParams";
-import { fetchDialog } from "../models/dialogs";
+import withAuth from "../withAuth";
+import { fetchDialog, updateDialog } from "../models/dialogs";
 
 class DialogUpdate extends React.Component {
   constructor(props) {
@@ -11,9 +12,15 @@ class DialogUpdate extends React.Component {
     this.state = {};
   }
   async componentDidMount() {
+    await this.props.setupAccessToken();
     const dialogId = this.props.params.dialog_id;
     const dialog = await fetchDialog(dialogId);
     this.setState({ dialog });
+  }
+  async submitForm(form) {
+    await this.props.setupAccessToken();
+    const dialogId = this.props.params.dialog_id;
+    await updateDialog(form);
   }
   render() {
     const dialog = this.state.dialog;
@@ -25,4 +32,4 @@ class DialogUpdate extends React.Component {
   }
 }
 
-export default withParams(DialogUpdate);
+export default withParams(withAuth(DialogUpdate));

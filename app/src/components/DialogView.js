@@ -5,9 +5,11 @@ import { Switch, Route, Link } from "react-router-dom";
 import { fetchDialog } from "../models/dialogs";
 
 import withParams from "../withParams";
+import withAuth from "../withAuth";
 
 class DialogView extends React.Component {
   async componentDidMount() {
+    await this.props.setupAccessToken();
     const dialog_id = this.props.params.dialog_id;
     const dialog = await fetchDialog(dialog_id);
     this.setState({ dialog });
@@ -37,4 +39,4 @@ class DialogView extends React.Component {
   }
 }
 
-export default withParams(DialogView);
+export default withParams(withAuth(DialogView));
