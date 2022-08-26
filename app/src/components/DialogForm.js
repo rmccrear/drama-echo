@@ -21,6 +21,7 @@ class DialogForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = unpackDialog(this.props.dialog);
   }
   handleChange(e) {
@@ -28,6 +29,10 @@ class DialogForm extends React.Component {
     const fieldVal = e.target.value;
     console.log(fieldName, fieldVal);
     this.setState = { ...this.state, [fieldName]: fieldVal };
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.handleSubmit(this.state);
   }
   render() {
     return (

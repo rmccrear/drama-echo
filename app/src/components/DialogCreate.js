@@ -5,12 +5,16 @@ import Card from "react-bootstrap/Card";
 
 import DialogForm from "./DialogForm";
 
-import { blankDialog } from "../models/dialogs";
+import { blankDialog, createDialog } from "../models/dialogs";
 
 class DialogCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = { dialog: blankDialog() };
+  }
+  async handleSubmit(dialog) {
+    await this.props.setupAccessToken();
+    await createDialog(dialog);
   }
   render() {
     return (

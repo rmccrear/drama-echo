@@ -37,6 +37,30 @@ const fetchLinesForDialog = async (dialog_id) => {
   return mockData.lines.filter((line) => line.dialog_id === dialog_id);
 };
 
+const createDialog = (dialogParams) => {
+  const axios = getApiFetcher();
+  return axios
+    .post("/dialogs", dialogParams)
+    .then((resp) => {
+      return resp.data;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+const updateDialog = (dialogId, dialogParams) => {
+  const axios = getApiFetcher();
+  return axios
+    .put(`/dialogs/${dialogId}`, dialogParams)
+    .then((resp) => {
+      return resp.data;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 const blankDialog = () => {
   return {
     title: "",
@@ -44,4 +68,11 @@ const blankDialog = () => {
   };
 };
 
-export { fetchDialogsForUser, fetchDialog, fetchLinesForDialog, blankDialog };
+export {
+  fetchDialogsForUser,
+  fetchDialog,
+  fetchLinesForDialog,
+  createDialog,
+  updateDialog,
+  blankDialog,
+};
