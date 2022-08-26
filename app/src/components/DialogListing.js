@@ -5,6 +5,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
+import withAuth from "../withAuth";
+
 import "./DialogListing.scss";
 
 import { fetchDialogsForUser } from "../models/dialogs";
@@ -54,4 +56,4 @@ class DialogListing extends React.Component {
   }
 }
 
-export default DialogListing;
+export default withAuth(DialogListing);

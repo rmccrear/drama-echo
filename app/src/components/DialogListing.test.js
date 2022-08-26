@@ -2,6 +2,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import DialogListing from "./DialogListing";
 
+jest.mock("../models/api");
+jest.mock("../withAuth");
+
 import testData from "../__test__/db-seeds";
 
 const testUser = testData.users[0];

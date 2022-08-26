@@ -68,6 +68,18 @@ const blankDialog = () => {
   };
 };
 
+const deleteDialog = (dialogId) => {
+  const axios = getApiFetcher();
+  return axios
+    .delete(`/dialogs/${dialogId}`)
+    .then((resp) => {
+      return resp.data;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 export {
   fetchDialogsForUser,
   fetchDialog,
@@ -75,4 +87,5 @@ export {
   createDialog,
   updateDialog,
   blankDialog,
+  deleteDialog,
 };

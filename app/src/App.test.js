@@ -3,6 +3,7 @@ import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import App from "./App";
 
 jest.mock("./withAuth");
+jest.mock("./models/api");
 
 test("renders Home route", async () => {
   render(<App />, { wrapper: BrowserRouter });

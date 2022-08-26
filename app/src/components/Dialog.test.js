@@ -1,4 +1,8 @@
 import { render, screen } from "@testing-library/react";
+
+jest.mock("../models/api");
+jest.mock("../withAuth");
+
 import DialogView from "./DialogView";
 import DialogUpdate from "./DialogUpdate";
 import DialogCreate from "./DialogCreate";
@@ -13,7 +17,7 @@ describe("Dialog CRUD", () => {
     render(
       <MemoryRouter initialEntries={[testRoute]}>
         <Routes>
-          <Route path="dialogs/:dialog_id" element={<DialogView />} />
+          <Route path="/dialogs/:dialog_id" element={<DialogView />} />
         </Routes>
       </MemoryRouter>
     );
@@ -25,7 +29,7 @@ describe("Dialog CRUD", () => {
     render(
       <MemoryRouter initialEntries={[testRoute]}>
         <Routes>
-          <Route path="dialogs/:dialog_id/edit" element={<DialogUpdate />} />
+          <Route path="/dialogs/:dialog_id/edit" element={<DialogUpdate />} />
         </Routes>
       </MemoryRouter>
     );
@@ -38,7 +42,14 @@ describe("Dialog CRUD", () => {
     expect(role2).toHaveValue("Jack");
   });
   test("renders DialogCreate", async () => {
-    render(<DialogCreate />);
+    const testRoute = "/dialogs/new";
+    render(
+      <MemoryRouter initialEntries={[testRoute]}>
+        <Routes>
+          <Route path="/dialogs/new" element={<DialogCreate />} />
+        </Routes>
+      </MemoryRouter>
+    );
     const dialogTitleInput = await screen.findByPlaceholderText("Dialog Title");
     expect(dialogTitleInput).toBeInTheDocument();
     const role1 = await screen.findByPlaceholderText("Role 1");

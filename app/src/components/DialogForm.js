@@ -27,16 +27,20 @@ class DialogForm extends React.Component {
   handleChange(e) {
     const fieldName = e.target.name;
     const fieldVal = e.target.value;
-    console.log(fieldName, fieldVal);
-    this.setState = { ...this.state, [fieldName]: fieldVal };
+    this.setState({ ...this.state, [fieldName]: fieldVal });
   }
   handleSubmit(e) {
     e.preventDefault();
-    this.props.handleSubmit(this.state);
+    const { title, role1, role2 } = this.state;
+    const dialogParams = {
+      title,
+      characters: [role1, role2],
+    };
+    this.props.handleSubmit(dialogParams);
   }
   render() {
     return (
-      <Form>
+      <Form onSubmit={this.handleSubmit}>
         <Form.Group>
           <Form.Label>
             <span> Dialog Title </span>
@@ -62,7 +66,11 @@ class DialogForm extends React.Component {
           onChange={this.handleChange}
         />
         <Button type="submit">Submit</Button>
-        <Button variant="danger">Delete</Button>
+        {this.props.deleteFn && (
+          <Button variant="danger" onClick={this.props.deleteFn}>
+            Delete
+          </Button>
+        )}
       </Form>
     );
   }
