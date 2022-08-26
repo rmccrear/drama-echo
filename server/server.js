@@ -3,11 +3,11 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const cors = require("cors");
 
-const {jwtCheck} = require("./src/my-auth");
+const { jwtCheck } = require("./src/my-auth");
 
 // get MongoDB driver connection
 //const dbo = require("./src/db/conn");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const mongoConnectionString = process.env.MONGO_URL;
 
 const PORT = process.env.PORT || 5000;
@@ -34,13 +34,13 @@ var jwtCheck = jwt({
 });
 */
 
-const dialogRoutes = require("./src/api-routes/dialogs")
+const dialogRoutes = require("./src/api-routes/dialogs");
 app.use(dialogRoutes);
 
-app.get("/api/v1/my-profile", jwtCheck, function(req, res){
-    console.log(req.auth)
-    return res.json({message: "OK", username: req.auth.nickname});
-})
+app.get("/api/v1/my-profile", jwtCheck, function (req, res) {
+  console.log(req.auth);
+  return res.json({ message: "OK", username: req.auth.nickname });
+});
 /*
 const startServer = async () => {
   try {
@@ -55,7 +55,7 @@ const startServer = async () => {
 };
 */
 const startServer = async () => {
-  try{
+  try {
     await mongoose.connect(mongoConnectionString);
   } catch (err) {
     console.log(err);
@@ -65,6 +65,5 @@ const startServer = async () => {
   app.listen(PORT, () => {
     console.log("Running on port: ", PORT);
   });
-  
-}
+};
 startServer();

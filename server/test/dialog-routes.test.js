@@ -25,10 +25,10 @@ describe("get Dialogs", () => {
     await mongoose.disconnect();
   });
 
-  beforeEach(async()=>{
+  beforeEach(async () => {
     testDialogs = await Dialog.insertMany(dbSeeds.dialogs);
   });
-  afterEach(async()=>{
+  afterEach(async () => {
     testDialogs = undefined;
     await Dialog.deleteMany();
   });
@@ -45,7 +45,7 @@ describe("get Dialogs", () => {
     expect(resp.body.title).toBe(firstDialogTitle);
   });
   test("create dialog route works", async () => {
-    const dialogParams = {title: "Created Title", characters: ["J", "A"]};
+    const dialogParams = { title: "Created Title", characters: ["J", "A"] };
     const resp = await request(app).post(`/api/v1/dialogs`).send(dialogParams);
     expect(resp.body.title).toBe("Created Title");
     const new_id = resp.body._id;
@@ -54,7 +54,7 @@ describe("get Dialogs", () => {
   });
   test("update dialog route works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
-    const dialogUpdates = {title: "Updated Title"}
+    const dialogUpdates = { title: "Updated Title" };
     //await request(app).put(`/api/v1/dialogs/${dialog_id}`).send({...testDialogs[0], title: "Updated Title"});
     await request(app).put(`/api/v1/dialogs/${dialog_id}`).send(dialogUpdates);
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
@@ -62,7 +62,7 @@ describe("get Dialogs", () => {
   });
   test("update dialog route with validation works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
-    const dialogUpdates = {title2: "not in schema"}
+    const dialogUpdates = { title2: "not in schema" };
     //await request(app).put(`/api/v1/dialogs/${dialog_id}`).send({...testDialogs[0], title: "Updated Title"});
     await request(app).put(`/api/v1/dialogs/${dialog_id}`).send(dialogUpdates);
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);

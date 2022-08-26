@@ -2,13 +2,19 @@ const express = require("express");
 
 const dialogRoutes = express.Router();
 
-const {create, read, update, del, index} = require("./controllers/dialog-controllers");
+const {
+  create,
+  read,
+  update,
+  del,
+  index,
+} = require("./controllers/dialog-controllers");
 
 const dbo = require("../db/conn");
 
-const {jwtCheck} = require("../my-auth");
+const { jwtCheck } = require("../my-auth");
 
-dialogRoutes.use(jwtCheck)
+dialogRoutes.use(jwtCheck);
 
 /*
 dialogRoutes.route("/api/v1/dialogs").get(async (req, res) => {
