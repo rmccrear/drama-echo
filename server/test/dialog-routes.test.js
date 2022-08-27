@@ -90,7 +90,7 @@ describe("get Dialogs", () => {
       order: 1,
     };
     const resp3 = await request(app)
-      .post(`/api/v1/dialogs/${dialog_id}/line/new`)
+      .post(`/api/v1/dialogs/${dialog_id}/lines/new`)
       .send(lineParams);
     const line = resp3.body;
     expect(line.content).toBe("Good night!");
@@ -100,7 +100,7 @@ describe("get Dialogs", () => {
     // Update line
     const line_id = line._id;
     const resp5 = await request(app)
-      .put(`/api/v1/dialogs/${dialog_id}/line/${line_id}`)
+      .put(`/api/v1/dialogs/${dialog_id}/lines/${line_id}`)
       .send({ content: "Goodnight!" });
     const line2 = resp5.body;
 

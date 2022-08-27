@@ -39,7 +39,6 @@ async function update(req, res) {
       { $set: { "lines.$": lineParams } },
       { new: true }
     );
-    console.log(dialog);
     const line = dialog.lines.find((line) => line._id.toString() === line_id);
     res.send(line);
   } catch (e) {

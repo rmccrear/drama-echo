@@ -41,10 +41,10 @@ dialogRoutes.route("/api/v1/dialogs/:id").put(update);
 dialogRoutes.route("/api/v1/dialogs/:id").delete(del);
 
 dialogRoutes
-  .route("/api/v1/dialogs/:dialog_id/line/new")
+  .route("/api/v1/dialogs/:dialog_id/lines/new")
   .post(lineRoutes.create);
 dialogRoutes
-  .route("/api/v1/dialogs/:dialog_id/line/:line_id")
+  .route("/api/v1/dialogs/:dialog_id/lines/:line_id")
   .put(lineRoutes.update);
 
 module.exports = dialogRoutes;
