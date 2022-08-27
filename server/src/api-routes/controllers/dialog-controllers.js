@@ -53,10 +53,19 @@ async function read(req, res) {
   const { sub } = req.auth; // user_id
   try {
     const dialog = await getDialog(sub, id);
-    res.send(dialog);
+    console.log(dialog);
+    if (dialog) {
+      res.send(dialog);
+    } else {
+      res.status(404).send({ error: "Dialog not found " + id });
+    }
   } catch (e) {
     console.log(e);
-    res.status(400).send({ error: "Error fetching dialog " + id });
+    if (e.name === "CastError") {
+      res.status(404).send({ error: "Cannot find dialog with bad ID" + id });
+    } else {
+      res.status(400).send({ error: "Error fetching dialog " + id });
+    }
   }
 }
 
