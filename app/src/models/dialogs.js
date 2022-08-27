@@ -14,7 +14,9 @@ const fetchDialogsForUser = async () => {
   return axios
     .get(`/dialogs`)
     .then((resp) => {
-      return resp.data;
+      if (resp.data.length) {
+        return resp.data.map((dialog) => new Dialog(dialog));
+      } else return [];
     })
     .catch((e) => {
       console.log(e);
@@ -26,7 +28,7 @@ const fetchDialog = (dialog_id) => {
   return axios
     .get(`/dialogs/${dialog_id}`)
     .then((resp) => {
-      return resp.data;
+      return new Dialog(resp.data);
     })
     .catch((e) => {
       return { error: e.response };
@@ -42,7 +44,7 @@ const createDialog = (dialogParams) => {
   return axios
     .post("/dialogs", dialogParams)
     .then((resp) => {
-      return resp.data;
+      return new Dialog(resp.data);
     })
     .catch((e) => {
       console.log(e);
@@ -54,7 +56,7 @@ const updateDialog = (dialogId, dialogParams) => {
   return axios
     .put(`/dialogs/${dialogId}`, dialogParams)
     .then((resp) => {
-      return resp.data;
+      return new Dialog(resp.data);
     })
     .catch((e) => {
       console.log(e);
@@ -62,10 +64,10 @@ const updateDialog = (dialogId, dialogParams) => {
 };
 
 const blankDialog = () => {
-  return {
+  return new Dialog({
     title: "",
     characters: ["", ""],
-  };
+  });
 };
 
 const deleteDialog = (dialogId) => {
@@ -80,6 +82,25 @@ const deleteDialog = (dialogId) => {
     });
 };
 
+class Dialog {
+  constructor(d) {
+    this.title = d.title;
+    this.characters = d.characters || [];
+    this.lines = d.lines || [];
+    this._id = d._id;
+    this.user_sub = d.user_sub;
+  }
+  toJson() {
+    return {
+      title: this.title,
+      characters: this.characters,
+      lines: this.lines,
+      _id: this._id,
+      user_sub: this.user_sub,
+    };
+  }
+}
+
 export {
   fetchDialogsForUser,
   fetchDialog,
@@ -88,4 +109,5 @@ export {
   updateDialog,
   blankDialog,
   deleteDialog,
+  Dialog,
 };
