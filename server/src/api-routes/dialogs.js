@@ -10,6 +10,8 @@ const {
   index,
 } = require("./controllers/dialog-controllers");
 
+const lineRoutes = require("./controllers/dialog-line-controllers");
+
 const dbo = require("../db/conn");
 
 const { jwtCheck } = require("../my-auth");
@@ -37,5 +39,12 @@ dialogRoutes.route("/api/v1/dialogs").post(create);
 dialogRoutes.route("/api/v1/dialogs/:id").get(read);
 dialogRoutes.route("/api/v1/dialogs/:id").put(update);
 dialogRoutes.route("/api/v1/dialogs/:id").delete(del);
+
+dialogRoutes
+  .route("/api/v1/dialogs/:dialog_id/line/new")
+  .post(lineRoutes.create);
+dialogRoutes
+  .route("/api/v1/dialogs/:dialog_id/line/:line_id")
+  .put(lineRoutes.update);
 
 module.exports = dialogRoutes;

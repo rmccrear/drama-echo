@@ -10,6 +10,7 @@ const app = express();
 
 const { Dialog } = require("./../src/db/models/dialogs");
 const dbSeeds = require("./db-seeds");
+const { post } = require("../src/api-routes/dialogs.js");
 
 app.use(express.json());
 app.use(dialogRoutes);
@@ -55,7 +56,6 @@ describe("get Dialogs", () => {
   test("update dialog route works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
     const dialogUpdates = { title: "Updated Title" };
-    //await request(app).put(`/api/v1/dialogs/${dialog_id}`).send({...testDialogs[0], title: "Updated Title"});
     await request(app).put(`/api/v1/dialogs/${dialog_id}`).send(dialogUpdates);
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp.body.title).toBe("Updated Title");
@@ -63,7 +63,6 @@ describe("get Dialogs", () => {
   test("update dialog route with validation works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
     const dialogUpdates = { title2: "not in schema" };
-    //await request(app).put(`/api/v1/dialogs/${dialog_id}`).send({...testDialogs[0], title: "Updated Title"});
     await request(app).put(`/api/v1/dialogs/${dialog_id}`).send(dialogUpdates);
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp.body.title2).toBeUndefined();
@@ -73,5 +72,39 @@ describe("get Dialogs", () => {
     const resp = await request(app).delete(`/api/v1/dialogs/${dialog_id}`);
     const resp2 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp2.body.title).toBeUndefined();
+  });
+
+  test("create line of dialog route works", async () => {
+    // Create dialog
+    const dialogParams = { title: "Created Title", characters: ["J", "R"] };
+    const resp = await request(app).post(`/api/v1/dialogs`).send(dialogParams);
+    expect(resp.body.title).toBe("Created Title");
+    const new_id = resp.body._id;
+    const resp2 = await request(app).get(`/api/v1/dialogs/${new_id}`);
+    expect(resp2.body.title).toBe("Created Title");
+    // Create line
+    const dialog_id = resp2.body._id;
+    const lineParams = {
+      content: "Good night!",
+      characterIdx: 0,
+      order: 1,
+    };
+    const resp3 = await request(app)
+      .post(`/api/v1/dialogs/${dialog_id}/line/new`)
+      .send(lineParams);
+    const line = resp3.body;
+    expect(line.content).toBe("Good night!");
+    const resp4 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
+    expect(resp4.body.lines[0].content).toBe("Good night!");
+
+    // Update line
+    const line_id = line._id;
+    const resp5 = await request(app)
+      .put(`/api/v1/dialogs/${dialog_id}/line/${line_id}`)
+      .send({ content: "Goodnight!" });
+    const line2 = resp5.body;
+
+    const resp6 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
+    expect(resp6.body.lines[0].content).toBe("Goodnight!");
   });
 });

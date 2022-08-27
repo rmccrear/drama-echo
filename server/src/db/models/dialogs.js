@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
+const lineSchema = new mongoose.Schema({
+  characterIdx: Number, // index from characters in Dialog
+  content: String,
+});
+
 const dialogSchema = new mongoose.Schema({
   title: String,
   characters: [String],
   user_sub: String,
+  lines: [lineSchema],
 });
 
 const Dialog = mongoose.model("Dialog", dialogSchema);

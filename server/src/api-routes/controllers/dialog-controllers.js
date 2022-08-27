@@ -53,7 +53,6 @@ async function read(req, res) {
   const { sub } = req.auth; // user_id
   try {
     const dialog = await getDialog(sub, id);
-    console.log(dialog);
     if (dialog) {
       res.send(dialog);
     } else {
