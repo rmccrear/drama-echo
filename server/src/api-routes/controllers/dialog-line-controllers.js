@@ -33,6 +33,7 @@ async function update(req, res) {
       content: d.content,
       characterIdx: d.characterIdx,
       order: d.order,
+      _id: line_id, // keep the old id
     };
     const dialog = await Dialog.findOneAndUpdate(
       { user_sub: sub, _id: dialog_id, "lines._id": line_id },
