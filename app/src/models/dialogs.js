@@ -29,7 +29,7 @@ const fetchDialog = (dialog_id) => {
       return resp.data;
     })
     .catch((e) => {
-      console.log(e);
+      return { error: e.response };
     });
 };
 

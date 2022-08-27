@@ -8,15 +8,23 @@ import withParams from "../withParams";
 import withAuth from "../withAuth";
 
 class DialogView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: true };
+  }
   async componentDidMount() {
     await this.props.setupAccessToken();
     const dialog_id = this.props.params.dialog_id;
-    const dialog = await fetchDialog(dialog_id);
-    this.setState({ dialog });
+    const resp = await fetchDialog(dialog_id);
+    if (resp.error) {
+      this.setState({ error: resp.error, loading: false });
+    } else {
+      this.setState({ dialog: resp, loading: false });
+    }
   }
 
   render() {
-    return this.state ? (
+    return !this.state.error && !this.state.loading ? (
       <div className="container">
         <Card>
           <h1> {this.state.dialog.title} </h1>
@@ -33,8 +41,13 @@ class DialogView extends React.Component {
           </Button>
         </Card>
       </div>
+    ) : this.state.error ? (
+      <div className="container">
+        {" "}
+        Document not found {this.state.error.status}{" "}
+      </div>
     ) : (
-      <div className="container"></div>
+      ""
     );
   }
 }

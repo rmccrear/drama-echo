@@ -9,15 +9,19 @@ import { fetchDialog, updateDialog, deleteDialog } from "../models/dialogs";
 class DialogUpdate extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { loading: true };
     this.handleDeleteButton = this.handleDeleteButton.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   async componentDidMount() {
     await this.props.setupAccessToken();
     const dialogId = this.props.params.dialog_id;
-    const dialog = await fetchDialog(dialogId);
-    this.setState({ dialog });
+    const resp = await fetchDialog(dialogId);
+    if (resp.error) {
+      this.setState({ error: resp.error, loading: false });
+    } else {
+      this.setState({ dialog: resp, loading: false });
+    }
   }
   async handleSubmit(dialogParams) {
     await this.props.setupAccessToken();
@@ -36,12 +40,14 @@ class DialogUpdate extends React.Component {
     return (
       <div className="container">
         <Card>
-          {dialog ? (
+          {dialog && !this.state.loading ? (
             <DialogForm
               dialog={dialog}
               deleteFn={this.handleDeleteButton}
               handleSubmit={this.handleSubmit}
             />
+          ) : this.state.error ? (
+            <div>Error loading document {this.state.error.statusText}</div>
           ) : (
             ""
           )}
