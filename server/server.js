@@ -38,7 +38,6 @@ const dialogRoutes = require("./src/api-routes/dialogs");
 app.use(dialogRoutes);
 
 app.get("/api/v1/my-profile", jwtCheck, function (req, res) {
-  console.log(req.auth);
   return res.json({ message: "OK", username: req.auth.nickname });
 });
 /*

@@ -12,7 +12,7 @@ const {
 
 const lineRoutes = require("./controllers/dialog-line-controllers");
 
-const dbo = require("../db/conn");
+// const dbo = require("../db/conn");
 
 const { jwtCheck } = require("../my-auth");
 
@@ -49,4 +49,9 @@ dialogRoutes
 dialogRoutes
   .route("/api/v1/dialogs/:dialog_id/lines/:line_id")
   .delete(lineRoutes.del);
+
+const { sign } = require("./controllers/cloudinary-controller");
+dialogRoutes.route("/api/v1/signuploadform").get(sign);
+dialogRoutes.route("/api/v1/signuploadform/:public_id").get(sign);
+
 module.exports = dialogRoutes;

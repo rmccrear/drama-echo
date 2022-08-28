@@ -9,6 +9,7 @@ import {
   deleteLineOfDialog,
   blankLine,
 } from "../models/dialogs";
+import { publicNameGen } from "./CloudinaryUploader";
 
 class LineListing extends React.Component {
   constructor(props) {
@@ -53,12 +54,13 @@ class LineListing extends React.Component {
     const { lines } = this.state;
     return (
       <div className="container">
-        {lines.map((line, idx) => (
+        {lines.map((line) => (
           <Line
             key={line._id}
             updateLine={this.updateLine}
             deleteLine={this.deleteLine}
             line={line}
+            audioPublicId={publicNameGen(this.props.dialog, line)}
             characters={this.props.dialog.characters}
           />
         ))}

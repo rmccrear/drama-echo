@@ -1,5 +1,6 @@
 import { getApiFetcher } from "./api";
 import mockData from "../__test__/db-seeds";
+// import axios from "axios";
 
 //const fetchDialogsForUser = async (user_id) => {
 //  return mockData.dialogs.filter((d) => d.user_id === user_id);
@@ -28,7 +29,6 @@ const fetchDialog = (dialog_id) => {
   return axios
     .get(`/dialogs/${dialog_id}`)
     .then((resp) => {
-      console.log(resp);
       return new Dialog(resp.data);
     })
     .catch((e) => {
@@ -149,6 +149,23 @@ function deleteLineOfDialog(dialog, line) {
     });
 }
 
+function getUploadSig(public_name) {
+  const axios = getApiFetcher();
+  // const public_name = `${dialog._id}--${line._id}`;
+  let url;
+  if (public_name) url = `/signuploadform/${public_name}`;
+  else url = `/signuploadform`;
+  return axios
+    .get(url)
+    .then((result) => {
+      return result.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      return { error: e };
+    });
+}
+
 export {
   fetchDialogsForUser,
   fetchDialog,
@@ -163,4 +180,5 @@ export {
   updateLineOfDialog,
   deleteLineOfDialog,
   blankLine,
+  getUploadSig,
 };

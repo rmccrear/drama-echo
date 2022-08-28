@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Line as LineObj } from "../models/dialogs";
-import Uploader from "./CloudinaryUploader";
+import Uploader, { publicNameGen } from "./CloudinaryUploader";
 
 function characterNamefromIdx(idx, characters) {
   return characters[idx];
@@ -27,12 +27,12 @@ class Line extends React.Component {
   }
   render() {
     const { editing } = this.state;
-    console.log(this.props);
     const { content } = this.props.line;
     const characterName = characterNamefromIdx(
       this.props.line.characterIdx,
       this.props.characters
     );
+    console.log(this.props);
     if (!editing) {
       return (
         <Card>
@@ -47,7 +47,7 @@ class Line extends React.Component {
         </Card>
       );
     } else {
-      console.log(this.props.line);
+      console.log(this.props);
       return (
         <LineForm
           handleUpdateLine={this.handleUpdateLine}
@@ -55,6 +55,7 @@ class Line extends React.Component {
           line={this.props.line}
           characters={this.props.characters}
           handleCancel={this.handleCancel}
+          audioPublicId={this.props.audioPublicId}
         ></LineForm>
       );
     }
@@ -110,7 +111,7 @@ class LineForm extends React.Component {
             defaultValue={this.props.line.content}
             onChange={this.handleChange}
           />
-          <Uploader />
+          <Uploader publicId={this.props.audioPublicId} />
           <Button type="submit">Submit</Button>
           <Button variant="secondary" onClick={this.props.handleCancel}>
             Cancel
@@ -129,7 +130,6 @@ class CharacterSelect extends React.Component {
     const characterIdx = this.props.line.characterIdx;
     const characters = this.props.characters;
     const handleSelect = this.props.handleSelect;
-    console.log(characters);
     return (
       <Form.Group>
         <Form.Label>
