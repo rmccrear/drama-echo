@@ -32,12 +32,20 @@ class Line extends React.Component {
       this.props.line.characterIdx,
       this.props.characters
     );
-    console.log(this.props);
     if (!editing) {
       return (
         <Card>
           <p>{characterName}: </p>
           <div>{content}</div>
+          <div>
+            {this.props.line.audioUrl ? (
+              <audio controls>
+                <source src={this.props.line.audioUrl} />
+              </audio>
+            ) : (
+              ""
+            )}
+          </div>
           <Button
             disabled={this.state.pending}
             onClick={(e) => this.setState({ editing: !editing })}
@@ -47,7 +55,6 @@ class Line extends React.Component {
         </Card>
       );
     } else {
-      console.log(this.props);
       return (
         <LineForm
           handleUpdateLine={this.handleUpdateLine}
@@ -69,6 +76,7 @@ class LineForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.handleUploadedFile = this.handleUploadedFile.bind(this);
     this.state = { line: this.props.line };
   }
   handleChange(e) {
@@ -81,17 +89,20 @@ class LineForm extends React.Component {
     const value = e.target.value;
     const newLine = { ...this.state.line, characterIdx: parseInt(value, 10) };
     this.setState({ ...this.state, line: newLine });
-    console.log(newLine);
   }
   handleSubmit(e) {
     e.preventDefault();
-    console.log({ ...this.state.line });
     const line = new LineObj(this.state.line);
-    console.log(line);
     this.props.handleUpdateLine(line);
   }
   handleDelete(e) {
     this.props.handleDeleteLine(this.props.line);
+  }
+  handleUploadedFile(file) {
+    this.state.line.audioUrl = file.secure_url;
+    const newLine = { ...this.state.line, audioUrl: file.secure_url };
+    this.props.handleUpdateLine(newLine);
+    this.setState({ ...this.state, line: newLine });
   }
   render() {
     return (
@@ -111,7 +122,10 @@ class LineForm extends React.Component {
             defaultValue={this.props.line.content}
             onChange={this.handleChange}
           />
-          <Uploader publicId={this.props.audioPublicId} />
+          <Uploader
+            publicId={this.props.audioPublicId}
+            handleUploadedFile={this.handleUploadedFile}
+          />
           <Button type="submit">Submit</Button>
           <Button variant="secondary" onClick={this.props.handleCancel}>
             Cancel

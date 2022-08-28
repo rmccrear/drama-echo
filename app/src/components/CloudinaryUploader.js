@@ -27,10 +27,11 @@ function uploadFile(file, signData, publicId) {
     body: formData,
   })
     .then((response) => {
-      return response.text();
+      return response.json();
     })
     .then((data) => {
       console.log(data);
+      return data;
     })
     .catch((e) => {
       console.log(e);
@@ -40,7 +41,6 @@ function uploadFile(file, signData, publicId) {
 class CloudinaryUploader extends React.Component {
   constructor(props) {
     super(props);
-    console.log(cl);
     //this.sign();
     this.sign = this.sign.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -48,35 +48,32 @@ class CloudinaryUploader extends React.Component {
   async sign() {
     await this.props.setupAccessToken();
     const publicId = this.props.publicId;
-    console.log(this.props);
     const sig = await getUploadSig(publicId);
-    console.log(sig);
     return sig;
   }
   async handleChange(e) {
     e.preventDefault();
     const sig = await this.sign();
     const publicId = this.props.publicId;
-    console.log(e.target.files);
     if (e.target.files.length === 1) {
       const file = e.target.files[0];
-      uploadFile(file, sig, publicId);
+      const uploadedFile = await uploadFile(file, sig, publicId);
+      console.log(uploadedFile);
+      this.props.handleUploadedFile(uploadedFile);
     }
   }
   render() {
     return (
       <div>
         Upload
-        <Form>
-          <Form.Group>
-            <Form.Label>"Select File:"</Form.Label>
-            <Form.Control
-              onChange={this.handleChange}
-              type="file"
-              accept="audio/*,video/*"
-            ></Form.Control>
-          </Form.Group>
-        </Form>
+        <Form.Group>
+          <Form.Label>"Select File:"</Form.Label>
+          <Form.Control
+            onChange={this.handleChange}
+            type="file"
+            accept="audio/*,video/*"
+          ></Form.Control>
+        </Form.Group>
       </div>
     );
   }

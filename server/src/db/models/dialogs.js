@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const lineSchema = new mongoose.Schema({
   characterIdx: Number, // index from characters in Dialog
   content: String,
+  audioUrl: String,
 });
 
 const dialogSchema = new mongoose.Schema({

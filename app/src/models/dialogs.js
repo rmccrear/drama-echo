@@ -103,6 +103,7 @@ class Line {
     this.characterIdx = l.characterIdx;
     this._id = l._id;
     this.user_sub = l.user_sub;
+    this.audioUrl = l.audioUrl;
   }
 }
 

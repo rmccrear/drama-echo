@@ -16,11 +16,9 @@ const withAuthDev = (Component) => {
 const withAuth = (Component) => {
   return (props) => {
     const myAuth0 = useAuth0();
-    console.log(myAuth0);
     const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
       myAuth0;
 
-    console.log("user: ", user);
     const setupAccessToken = () => {
       console.log("trying to get Token");
       return getAccessTokenSilently()
