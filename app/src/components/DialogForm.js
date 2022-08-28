@@ -66,6 +66,9 @@ class DialogForm extends React.Component {
           onChange={this.handleChange}
         />
         <Button type="submit">Submit</Button>
+        <Button variant="secondary" onClick={this.props.cancelEdit}>
+          Cancel
+        </Button>
         {this.props.deleteFn && (
           <Button variant="danger" onClick={this.props.deleteFn}>
             Delete

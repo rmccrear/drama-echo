@@ -12,6 +12,7 @@ class DialogUpdate extends React.Component {
     this.state = { loading: true };
     this.handleDeleteButton = this.handleDeleteButton.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
   }
   async componentDidMount() {
     await this.props.setupAccessToken();
@@ -35,6 +36,10 @@ class DialogUpdate extends React.Component {
     await deleteDialog(dialogId);
     this.props.navigate("/dialogs");
   }
+  cancelEdit() {
+    const dialogId = this.props.params.dialog_id;
+    this.props.navigate(`/dialogs/${dialogId}`);
+  }
   render() {
     const dialog = this.state.dialog;
     return (
@@ -45,6 +50,7 @@ class DialogUpdate extends React.Component {
               dialog={dialog}
               deleteFn={this.handleDeleteButton}
               handleSubmit={this.handleSubmit}
+              cancelEdit={this.cancelEdit}
             />
           ) : this.state.error ? (
             <div>Error loading document {this.state.error.statusText}</div>
