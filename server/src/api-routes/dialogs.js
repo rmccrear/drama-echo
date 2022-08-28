@@ -46,5 +46,7 @@ dialogRoutes
 dialogRoutes
   .route("/api/v1/dialogs/:dialog_id/lines/:line_id")
   .put(lineRoutes.update);
-
+dialogRoutes
+  .route("/api/v1/dialogs/:dialog_id/lines/:line_id")
+  .delete(lineRoutes.del);
 module.exports = dialogRoutes;

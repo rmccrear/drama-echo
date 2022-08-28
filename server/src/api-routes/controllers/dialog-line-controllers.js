@@ -48,7 +48,25 @@ async function update(req, res) {
   }
 }
 
+async function del(req, res) {
+  const { dialog_id, line_id } = req.params; // dialog_id
+  const { sub } = req.auth; // user_id
+  console.log(dialog_id, line_id);
+  try {
+    const result = await Dialog.findOneAndUpdate(
+      { _id: dialog_id, user_sub: sub },
+      { $pull: { lines: { _id: line_id } } },
+      { new: true }
+    );
+    res.send(result);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ error: e });
+  }
+}
+
 module.exports = {
   create,
   update,
+  del,
 };

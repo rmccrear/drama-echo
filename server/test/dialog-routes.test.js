@@ -74,7 +74,7 @@ describe("get Dialogs", () => {
     expect(resp2.body.title).toBeUndefined();
   });
 
-  test("create line of dialog route works", async () => {
+  test("create and update and delete line of dialog route works", async () => {
     // Create dialog
     const dialogParams = { title: "Created Title", characters: ["J", "R"] };
     const resp = await request(app).post(`/api/v1/dialogs`).send(dialogParams);
@@ -106,5 +106,12 @@ describe("get Dialogs", () => {
 
     const resp6 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp6.body.lines[0].content).toBe("Goodnight!");
+
+    const resp7 = await request(app).delete(
+      `/api/v1/dialogs/${dialog_id}/lines/${line_id}`
+    );
+    // console.log(resp7.body); // returns dialog after the line is removed
+    const resp8 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
+    expect(resp8.body.lines.length).toBe(0);
   });
 });

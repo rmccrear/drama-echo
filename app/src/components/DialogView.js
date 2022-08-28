@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import { Switch, Route, Link } from "react-router-dom";
 import { fetchDialog } from "../models/dialogs";
 
+import LineListing from "./LineListing";
+
 import withParams from "../withParams";
 import withAuth from "../withAuth";
 
@@ -39,6 +41,12 @@ class DialogView extends React.Component {
           <Button as={Link} to={`/dialogs/${this.state.dialog._id}/edit`}>
             Edit
           </Button>
+        </Card>
+        <Card>
+          <LineListing
+            dialog={this.state.dialog}
+            lines={this.state.dialog.lines}
+          />
         </Card>
       </div>
     ) : this.state.error ? (

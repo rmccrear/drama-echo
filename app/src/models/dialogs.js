@@ -28,6 +28,7 @@ const fetchDialog = (dialog_id) => {
   return axios
     .get(`/dialogs/${dialog_id}`)
     .then((resp) => {
+      console.log(resp);
       return new Dialog(resp.data);
     })
     .catch((e) => {
@@ -70,6 +71,10 @@ const blankDialog = () => {
   });
 };
 
+const blankLine = () => {
+  return new Line({ content: "", characterIdx: 0 });
+};
+
 const deleteDialog = (dialogId) => {
   const axios = getApiFetcher();
   return axios
@@ -90,15 +95,58 @@ class Dialog {
     this._id = d._id;
     this.user_sub = d.user_sub;
   }
-  toJson() {
-    return {
-      title: this.title,
-      characters: this.characters,
-      lines: this.lines,
-      _id: this._id,
-      user_sub: this.user_sub,
-    };
+}
+
+class Line {
+  constructor(l) {
+    this.content = l.content;
+    this.characterIdx = l.characterIdx;
+    this._id = l._id;
+    this.user_sub = l.user_sub;
   }
+}
+
+function createLineOfDialog(dialog, lineParams) {
+  const axios = getApiFetcher();
+  return axios
+    .post(`/dialogs/${dialog._id}/lines/new`, lineParams)
+    .then((resp) => {
+      return new Line(resp.data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+function updateLineOfDialog(dialog, lineParams) {
+  const axios = getApiFetcher();
+  console.log(lineParams);
+  const dialog_id = dialog._id;
+  const line_id = lineParams._id;
+  return axios
+    .put(`/dialogs/${dialog_id}/lines/${line_id}`, lineParams)
+    .then((resp) => {
+      console.log(resp);
+      return new Line(resp.data);
+    })
+    .catch((e) => {
+      console.log(e);
+      return { error: e };
+    });
+}
+
+function deleteLineOfDialog(dialog, line) {
+  const axios = getApiFetcher();
+  const dialog_id = dialog._id;
+  const line_id = line._id;
+  return axios
+    .delete(`/dialogs/${dialog_id}/lines/${line_id}`)
+    .then((resp) => {
+      return new Dialog(resp);
+    })
+    .catch((e) => {
+      console.log(e);
+      return { error: e };
+    });
 }
 
 export {
@@ -110,4 +158,9 @@ export {
   blankDialog,
   deleteDialog,
   Dialog,
+  Line,
+  createLineOfDialog,
+  updateLineOfDialog,
+  deleteLineOfDialog,
+  blankLine,
 };
