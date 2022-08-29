@@ -1,4 +1,5 @@
 const { Dialog } = require("../../db/models/dialogs");
+const { deleteMedia } = require("./cloudinary-controller");
 
 async function create(req, res) {
   const { dialog_id } = req.params; // dialog_id
@@ -50,6 +51,8 @@ async function del(req, res) {
       { $pull: { lines: { _id: line_id } } },
       { new: true }
     );
+    const del_resp = deleteMedia(dialog_id, line_id);
+    console.log(del_resp);
     res.send(result);
   } catch (e) {
     console.log(e);

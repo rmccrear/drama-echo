@@ -5,6 +5,8 @@ const {
   Dialog,
 } = require("../../db/models/dialogs");
 
+const { deleteMedia } = require("./cloudinary-controller");
+
 async function index(req, res) {
   const { sub } = req.auth; // user_id
   try {
@@ -72,7 +74,9 @@ async function del(req, res) {
   const { id } = req.params; // dialog_id
   const { sub } = req.auth; // user_id
   try {
-    await Dialog.deleteOne({ user_sub: sub, _id: id });
+    const dialog = await Dialog.findOneAndDelete({ user_sub: sub, _id: id });
+    const promises = dialog.lines.map((line) => deleteMedia(id, line._id));
+    await Promise.all(promises);
     res.send({ message: "Deleted dialog", id });
   } catch (e) {
     console.log(e);

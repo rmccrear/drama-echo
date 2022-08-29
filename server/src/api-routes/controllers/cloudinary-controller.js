@@ -4,12 +4,14 @@ require("../../cloudinary-config");
 const { Dialog } = require("../../db/models/dialogs");
 const apiSecret = cloudinary.config().api_secret;
 
+const remoteFolder = process.env.CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
+
 const signuploadform = (public_id) => {
   const timestamp = Math.round(new Date().getTime() / 1000);
   const requestedParams = {
     timestamp: timestamp,
     // eager: 'c_pad,h_300,w_400|c_crop,h_200,w_260',
-    folder: "signed_upload_demo_form",
+    folder: remoteFolder,
   };
   if (public_id) requestedParams.public_id = public_id;
   const signature = cloudinary.utils.api_sign_request(
@@ -66,4 +68,21 @@ async function validatePublicId(user_sub, public_id) {
   return false;
 }
 
-module.exports = { sign };
+function mediaPublicIdGen(dialog_id, line_id) {
+  return `${dialog_id}--${line_id}`;
+}
+
+function deleteMedia(dialog_id, line_id) {
+  const public_id = `${remoteFolder}/${mediaPublicIdGen(dialog_id, line_id)}`;
+  return cloudinary.uploader
+    .destroy(public_id, {
+      resource_type: "video",
+      invalidate: true,
+      type: "upload",
+    })
+    .then((res) => {
+      return res;
+    });
+}
+
+module.exports = { sign, deleteMedia };
