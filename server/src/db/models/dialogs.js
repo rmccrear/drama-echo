@@ -18,7 +18,7 @@ const Dialog = mongoose.model("Dialog", dialogSchema);
 async function getDialogsForUser(user_sub, len, offset) {
   //const db = dbo.getDb();
   // TODO: add pagination
-  // len = len || 20;
+  len = len || 20;
   // offest = offset || 0;
   // const dialogs = await Dialog.find({user_sub: user_sub}).sort({title: 1}).skip(offset).limit(len).exec();
   const dialogs = await Dialog.find({ user_sub: user_sub }).limit(len).exec();

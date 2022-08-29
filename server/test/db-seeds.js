@@ -1,9 +1,25 @@
 module.exports = {
-  users: [{ sub: "1" }, { sub: "2" }],
+  users: [{ sub: "1" }, { sub: "2" }, { sub: "3" }],
   dialogs: [
-    { title: "First Dialog", characters: ["Romeo", "Juliet"], user_sub: "1" },
-    { title: "Second Dialog", characters: ["Rose", "Jack"], user_sub: "1" },
-    { title: "Third Dialog", characters: ["Hamlet"], user_sub: "2 " },
+    {
+      title: "First Dialog",
+      characters: ["Romeo", "Juliet"],
+      user_sub: "1",
+      lines: [],
+    },
+    {
+      title: "Second Dialog",
+      characters: ["Rose", "Jack"],
+      user_sub: "1",
+      lines: [],
+      _id: "630a32ef36cc7ba320a3a637",
+    },
+    {
+      title: "Third Dialog",
+      characters: ["Hamlet"],
+      user_sub: "2 ",
+      lines: [],
+    },
   ],
   lines: [
     [],
@@ -21,7 +37,7 @@ module.exports = {
         character: "Rose",
         audio: {
           url: "https://cloudinary.com/12345",
-          audio_id: "1234",
+          audio_id: "12345",
         },
       },
       {
@@ -34,5 +50,19 @@ module.exports = {
       },
     ],
     [],
+  ],
+  practices: [
+    {
+      user_sub: "1",
+      dialog_id: "630a32ef36cc7ba320a3a637", // Second Dialog
+      characterIdx: 0,
+      echoes: [],
+    },
+    {
+      user_sub: "2",
+      dialog_id: "630a32ef36cc7ba320a3a637", // Second Dialog
+      characterIdx: 1,
+      echoes: [],
+    },
   ],
 };

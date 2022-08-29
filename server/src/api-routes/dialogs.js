@@ -12,6 +12,8 @@ const {
 
 const lineRoutes = require("./controllers/dialog-line-controllers");
 
+const practiceRoutes = require("./controllers/practice-controllers");
+
 // const dbo = require("../db/conn");
 
 const { jwtCheck } = require("../my-auth");
@@ -53,5 +55,25 @@ dialogRoutes
 const { sign } = require("./controllers/cloudinary-controller");
 dialogRoutes.route("/api/v1/signuploadform").get(sign);
 dialogRoutes.route("/api/v1/signuploadform/:public_id").get(sign);
+
+// use the dialog_id and the user_sub to find the practice document
+dialogRoutes.route("/api/v1/practice").get(practiceRoutes.index);
+dialogRoutes
+  .route("/api/v1/practice/:dialog_id")
+  .post(practiceRoutes.findOrCreate);
+dialogRoutes.route("/api/v1/practice/:dialog_id").get(practiceRoutes.read);
+dialogRoutes.route("/api/v1/practice/:practice_id").put(practiceRoutes.update);
+dialogRoutes.route("/api/v1/practice/:practice_id").delete(practiceRoutes.del);
+/*
+dialogRoutes
+  .route("/api/v1/practice/:dialog_id/echo/new")
+  .post(practiceRoutes.createEcho);
+dialogRoutes
+  .route("/api/v1/practice/:dialog_id/echo/:echo_id")
+  .post(practiceRoutes.updateEcho);
+dialogRoutes
+  .route("/api/v1/practice/:dialog_id/echo/:echo_id")
+  .delete(practiceRoutes.deleteEcho);
+  */
 
 module.exports = dialogRoutes;
