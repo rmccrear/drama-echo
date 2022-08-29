@@ -126,7 +126,6 @@ function updateLineOfDialog(dialog, lineParams) {
   return axios
     .put(`/dialogs/${dialog_id}/lines/${line_id}`, lineParams)
     .then((resp) => {
-      console.log(resp);
       return new Line(resp.data);
     })
     .catch((e) => {
@@ -142,7 +141,7 @@ function deleteLineOfDialog(dialog, line) {
   return axios
     .delete(`/dialogs/${dialog_id}/lines/${line_id}`)
     .then((resp) => {
-      return new Dialog(resp);
+      return new Dialog(resp.data);
     })
     .catch((e) => {
       console.log(e);
