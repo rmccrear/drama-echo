@@ -26,7 +26,7 @@ const AuthNavBar = (props) => {
     <Fragment>
       <NavLogout user={user} />
       <Nav.Link as={Link} to="my-profile">
-        ({props.user ? props.user.nickname : ""})
+        ({user ? user.nickname : ""})
       </Nav.Link>
     </Fragment>
   ) : (

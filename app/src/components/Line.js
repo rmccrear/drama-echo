@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Line as LineObj } from "../models/dialogs";
 import Uploader, { publicNameGen } from "./CloudinaryUploader";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
+
+import "./Line.scss";
 
 function characterNamefromIdx(idx, characters) {
   return characters[idx];
@@ -32,40 +35,54 @@ class Line extends React.Component {
       this.props.line.characterIdx,
       this.props.characters
     );
-    if (!editing) {
-      return (
-        <Card>
-          <p>{characterName}: </p>
-          <div>{content}</div>
-          <div>
-            {this.props.line.audioUrl ? (
-              <audio controls>
-                <source src={this.props.line.audioUrl} />
-              </audio>
-            ) : (
-              ""
-            )}
-          </div>
-          <Button
-            disabled={this.state.pending}
-            onClick={(e) => this.setState({ editing: !editing })}
-          >
-            Edit
-          </Button>
-        </Card>
-      );
-    } else {
-      return (
-        <LineForm
-          handleUpdateLine={this.handleUpdateLine}
-          handleDeleteLine={this.props.deleteLine}
-          line={this.props.line}
-          characters={this.props.characters}
-          handleCancel={this.handleCancel}
-          audioPublicId={this.props.audioPublicId}
-        ></LineForm>
-      );
-    }
+    return (
+      <SwitchTransition>
+        <CSSTransition
+          key={editing ? false : true}
+          addEndListener={(node, done) =>
+            node.addEventListener("transitionend", done, false)
+          }
+          classNames="fade"
+        >
+          {!editing ? (
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Header>
+                  <p>
+                    {characterName}: {content}
+                  </p>
+                </Card.Header>
+                <div>
+                  {this.props.line.audioUrl ? (
+                    <audio controls>
+                      <source src={this.props.line.audioUrl} />
+                    </audio>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <Button
+                  className="line-edit-button"
+                  disabled={this.state.pending}
+                  onClick={(e) => this.setState({ editing: !editing })}
+                >
+                  Edit
+                </Button>
+              </Card.Body>
+            </Card>
+          ) : (
+            <LineForm
+              handleUpdateLine={this.handleUpdateLine}
+              handleDeleteLine={this.props.deleteLine}
+              line={this.props.line}
+              characters={this.props.characters}
+              handleCancel={this.handleCancel}
+              audioPublicId={this.props.audioPublicId}
+            ></LineForm>
+          )}
+        </CSSTransition>
+      </SwitchTransition>
+    );
   }
 }
 
@@ -106,35 +123,60 @@ class LineForm extends React.Component {
   }
   render() {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Group>
-          <CharacterSelect
-            line={this.state.line}
-            characters={this.props.characters}
-            handleSelect={this.handleSelect}
-          />
-          <Form.Label>
-            <span> Write the line of dialog here. </span>
-          </Form.Label>
-          <Form.Control
-            name="content"
-            placeholder="To be, or not to be..."
-            defaultValue={this.props.line.content}
-            onChange={this.handleChange}
-          />
-          <Uploader
-            publicId={this.props.audioPublicId}
-            handleUploadedFile={this.handleUploadedFile}
-          />
-          <Button type="submit">Submit</Button>
-          <Button variant="secondary" onClick={this.props.handleCancel}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={this.handleDelete}>
-            Delete
-          </Button>
-        </Form.Group>
-      </Form>
+      <Card className="line-form-container mb-3">
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group>
+            <CharacterSelect
+              label="1. Choose the character who speaks this dialog."
+              line={this.state.line}
+              characters={this.props.characters}
+              handleSelect={this.handleSelect}
+            />
+            <Form.Label>
+              <span> 2. Write the line of dialog here. </span>
+            </Form.Label>
+            <Form.Control
+              name="content"
+              placeholder="To be, or not to be..."
+              defaultValue={this.props.line.content}
+              onChange={this.handleChange}
+            />
+            <div className="line-form-audio-uploader">
+              <Uploader
+                label={
+                  <div>
+                    <span>3. Select Audio. </span>
+                    {this.props.line.audioUrl && (
+                      <audio controls>
+                        <source src={this.props.line.audioUrl} />
+                      </audio>
+                    )}
+                  </div>
+                }
+                publicId={this.props.audioPublicId}
+                handleUploadedFile={this.handleUploadedFile}
+              />
+            </div>
+            <Button type="submit" className="line-submit-button">
+              Submit
+            </Button>
+            <Button
+              className="line-cancel-button"
+              variant="secondary"
+              onClick={this.props.handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              className="line-delete-button"
+              onClick={this.handleDelete}
+            >
+              Delete
+            </Button>
+          </Form.Group>
+        </Form>
+      </Card>
     );
   }
 }
@@ -147,7 +189,7 @@ class CharacterSelect extends React.Component {
     return (
       <Form.Group>
         <Form.Label>
-          <span> Choose the character who speaks this dialog. </span>
+          <span> {this.props.label} </span>
           <Form.Select
             aria-label="Select character for this line of dialog."
             onChange={handleSelect}

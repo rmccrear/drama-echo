@@ -43,9 +43,8 @@ class DialogListing extends React.Component {
                 <DialogItem key={dialog._id} dialog={dialog} />
               ))}
               <ListGroup.Item>
-                New
                 <Button as={Link} to="/dialogs/new">
-                  +
+                  New Dialog +
                 </Button>
               </ListGroup.Item>
             </ListGroup>

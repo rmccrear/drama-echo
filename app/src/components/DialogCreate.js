@@ -12,12 +12,17 @@ class DialogCreate extends React.Component {
     super(props);
     this.state = { dialog: blankDialog() };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
   }
   async handleSubmit(dialog) {
     await this.props.setupAccessToken();
     const dialogNew = await createDialog(dialog);
     const dialogId = dialogNew._id;
     this.props.navigate(`/dialogs/${dialogId}`);
+  }
+  cancelEdit() {
+    const dialogId = this.props.params.dialog_id;
+    this.props.navigate(`/dialogs`);
   }
   render() {
     return (
@@ -26,6 +31,7 @@ class DialogCreate extends React.Component {
           <DialogForm
             dialog={this.state.dialog}
             handleSubmit={this.handleSubmit}
+            cancelEdit={this.cancelEdit}
           />
         </Card>
       </div>

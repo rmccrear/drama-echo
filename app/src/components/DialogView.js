@@ -29,20 +29,36 @@ class DialogView extends React.Component {
     return !this.state.error && !this.state.loading ? (
       <div className="container">
         <Card>
-          <h1> {this.state.dialog.title} </h1>
-          {this.state.dialog.characters.map((character, i) => (
-            <p key={i}>
-              Character {i + 1}: {character}
-            </p>
-          ))}
-          <Button as={Link} to="/dialogs">
-            OK
-          </Button>
-          <Button as={Link} to={`/dialogs/${this.state.dialog._id}/edit`}>
-            Edit
-          </Button>
+          <Card.Body>
+            <h1> {this.state.dialog.title} </h1>
+            {this.state.dialog.characters.map((character, i) => (
+              <p key={i}>
+                Character {i + 1}: {character}
+              </p>
+            ))}
+            <Button
+              className="dialog-cancel-button"
+              variant="secondary"
+              as={Link}
+              to="/dialogs"
+              role="button"
+              style={{ float: "left" }}
+            >
+              OK
+            </Button>
+            <Button
+              className="dialog-edit-button"
+              as={Link}
+              to={`/dialogs/${this.state.dialog._id}/edit`}
+              role="button"
+              style={{ float: "right" }}
+            >
+              Edit
+            </Button>
+          </Card.Body>
         </Card>
         <Card>
+          <Card.Title>Lines of Dialog: </Card.Title>
           <LineListing
             dialog={this.state.dialog}
             lines={this.state.dialog.lines}

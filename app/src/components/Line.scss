@@ -1,0 +1,56 @@
+
+audio {
+    width: 100%;
+}
+
+.line-form-audio-uploader label{
+    width: 100%;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.line-edit-button {
+    float: right;
+}
+.line-submit-button {
+    float: left;
+}
+.line-cancel-button {
+    float: right;
+}
+.line-delete-button {
+    float: right;
+}
+
+// Transitions
+.line-item-enter {
+    opacity: 0;
+}
+.line-item-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+.line-item-exit {
+    opacity: 1;
+}
+.line-item-exit-active {
+    opacity: 0;
+    transition: opacity 500ms ease-in;
+}
+
+.fade-enter{
+    opacity: 0;
+}
+.fade-exit{
+    opacity: 1;
+}
+.fade-enter-active{
+    opacity: 1;
+}
+.fade-exit-active{
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-exit-active{
+    transition: opacity 500ms;
+}

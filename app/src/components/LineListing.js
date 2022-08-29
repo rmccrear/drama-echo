@@ -1,8 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-
 import Line from "./Line";
-
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import {
   createLineOfDialog,
   updateLineOfDialog,
@@ -11,16 +10,18 @@ import {
 } from "../models/dialogs";
 import { publicNameGen } from "./CloudinaryUploader";
 
+import "./Line.scss";
+
 class LineListing extends React.Component {
   constructor(props) {
     super(props);
     this.handleCreateLine = this.handleCreateLine.bind(this);
     this.updateLine = this.updateLine.bind(this);
     this.deleteLine = this.deleteLine.bind(this);
-    this.state = { lines: [] };
+    this.state = { lines: this.props.lines };
   }
   componentDidMount() {
-    this.setState({ lines: this.props.lines });
+    this.setState({ lines: this.state.lines });
   }
   async handleCreateLine() {
     const line = await createLineOfDialog(this.props.dialog, blankLine());
@@ -44,9 +45,12 @@ class LineListing extends React.Component {
   }
   async deleteLine(line) {
     console.log(this.props.dialog, line);
+    console.log(this.state);
     const result = await deleteLineOfDialog(this.props.dialog, line);
     if (!result.error) {
-      this.setState({ lines: result.lines });
+      console.log(result);
+      this.setState({ ...this.state, lines: result.lines });
+      console.log(this.state);
     }
     return result;
   }
@@ -54,16 +58,20 @@ class LineListing extends React.Component {
     const { lines } = this.state;
     return (
       <div className="container">
-        {lines.map((line) => (
-          <Line
-            key={line._id}
-            updateLine={this.updateLine}
-            deleteLine={this.deleteLine}
-            line={line}
-            audioPublicId={publicNameGen(this.props.dialog, line)}
-            characters={this.props.dialog.characters}
-          />
-        ))}
+        <TransitionGroup className="line-list">
+          {lines.map((line) => (
+            <CSSTransition key={line._id} timeout={500} classNames="line-item">
+              <Line
+                key={line._id}
+                updateLine={this.updateLine}
+                deleteLine={this.deleteLine}
+                line={line}
+                audioPublicId={publicNameGen(this.props.dialog, line)}
+                characters={this.props.dialog.characters}
+              />
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
         <div>
           <Button onClick={this.handleCreateLine}>Add Line + </Button>
         </div>
