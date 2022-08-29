@@ -4,6 +4,7 @@ const request = require("supertest");
 const express = require("express");
 const mongoose = require("mongoose");
 jest.mock("../src/my-auth");
+jest.mock("../src/api-routes/controllers/cloudinary-controller");
 const app = express();
 
 // const dbo = require("../src/db/conn");
@@ -101,7 +102,7 @@ describe("get Dialogs", () => {
     const line_id = line._id;
     const resp5 = await request(app)
       .put(`/api/v1/dialogs/${dialog_id}/lines/${line_id}`)
-      .send({ content: "Goodnight!" });
+      .send({ content: "Goodnight!", _id: line._id });
     const line2 = resp5.body;
 
     const resp6 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
