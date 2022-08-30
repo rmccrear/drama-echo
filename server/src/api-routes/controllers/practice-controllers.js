@@ -28,13 +28,15 @@ async function findOrCreate(req, res) {
     : -1;
   try {
     let practice = await Practice.findOne({ user_sub, dialog_id });
+    // if we can't find the Practice model, create
     if (!practice) {
-      const dialog = await Dialog.findOne({ dialog_id });
+      const dialog = await Dialog.findById(dialog_id);
       if (!dialog)
         return res
           .status(404)
           .send({ error: "Can't find dialog: " + dialog_id });
       dialog.user_sub = ""; // Don't leak other user's user_sub.
+      console.log(dialog);
       const lines = dialog.lines.map((line) => line.toJSON());
       const echoes = lines.map((line) => {
         return { line_id: line._id };

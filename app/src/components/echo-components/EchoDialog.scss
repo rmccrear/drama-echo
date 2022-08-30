@@ -1,0 +1,54 @@
+.speech-bubble-outer{
+    padding: 1rem;
+    padding-top: 3rem;
+    clear: both;
+}
+
+/* https://projects.verou.me/bubbly/ */
+.speech-bubble-yours {
+	position: relative;
+	background: #00bd0d;
+	border-radius: .4em;
+    clear: both;
+}
+
+.speech-bubble-yours:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 0.906em solid transparent;
+	border-left-color: #00bd0d;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -0.453em;
+	margin-right: -0.906em;
+}
+
+.speech-bubble-mine {
+	position: relative;
+	background: #ee692f;
+	border-radius: .4em;
+    clear: both;
+}
+
+.speech-bubble-mine:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 0.906em solid transparent;
+	border-right-color: #ee692f;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -0.453em;
+	margin-left: -0.906em;
+}
+.done-button-container { 
+    clear: both;
+    padding: 3rem;
+} 

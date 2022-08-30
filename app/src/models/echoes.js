@@ -18,11 +18,19 @@ async function getDialogFeed(excludedDialogs) {
 async function getPracticeFromDialogId(dialog_id) {
   const axios = getApiFetcher();
   return axios
-    .post(`/practice/${dialog_id}`) // This does a "get or create"
-    .send({})
+    .post(`/practice/${dialog_id}`, {}) // This does a "get or create"
     .then((resp) => {
       return resp.data;
     });
 }
 
-export { getDialogFeed, getPracticeFromDialogId };
+async function setCharacterIdxForPratice(characterIdx, practice_id) {
+  const axios = getApiFetcher();
+  return axios
+    .put(`/practice/${practice_id}`, { characterIdx }) // This does a "get or create"
+    .then((resp) => {
+      return resp.data;
+    });
+}
+
+export { getDialogFeed, getPracticeFromDialogId, setCharacterIdxForPratice };
