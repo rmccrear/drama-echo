@@ -12,5 +12,8 @@ const setupEchoDialogAuth = ({ token }) => {
 const getApiFetcher = () => {
   return apiInstance;
 };
+const wakeUpServer = () => {
+  axios.get(baseURL);
+};
 
-export { setupEchoDialogAuth, getApiFetcher };
+export { setupEchoDialogAuth, getApiFetcher, wakeUpServer };

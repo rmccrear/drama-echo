@@ -5,6 +5,8 @@ import "./home.scss";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 
+import { wakeUpServer } from "../models/api";
+
 const GetStartedButton = (props) => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
   return !isAuthenticated ? (
@@ -17,6 +19,10 @@ const GetStartedButton = (props) => {
 };
 
 class HomeRoute extends React.Component {
+  constructor(props) {
+    super(props);
+    wakeUpServer();
+  }
   render() {
     return (
       <React.Fragment>
