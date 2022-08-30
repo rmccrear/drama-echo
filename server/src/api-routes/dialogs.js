@@ -64,6 +64,9 @@ dialogRoutes
 dialogRoutes.route("/api/v1/practice/:dialog_id").get(practiceRoutes.read);
 dialogRoutes.route("/api/v1/practice/:practice_id").put(practiceRoutes.update);
 dialogRoutes.route("/api/v1/practice/:practice_id").delete(practiceRoutes.del);
+dialogRoutes
+  .route("/api/v1/practice/:practice_id/:echo_id")
+  .put(practiceRoutes.updateEcho);
 /*
 dialogRoutes
   .route("/api/v1/practice/:dialog_id/echo/new")

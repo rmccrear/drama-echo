@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const { dialogSchema } = require("./dialogs");
 
 const echoSchema = new mongoose.Schema({
-  characterIdx: Number, // index from characters in Dialog
-  audioUrl: String,
+  echoAudioUrl: String,
+  user_sub: String,
 });
 
 const practiceSchema = new mongoose.Schema({
@@ -10,6 +11,7 @@ const practiceSchema = new mongoose.Schema({
   dialog_id: String,
   characterIdx: Number,
   echoes: [echoSchema],
+  dialog: dialogSchema,
 });
 
 const Practice = mongoose.model("Practice", practiceSchema);

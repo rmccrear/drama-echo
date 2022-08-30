@@ -26,11 +26,22 @@ async function findOrCreate(req, res) {
   try {
     let practice = await Practice.findOne({ user_sub, dialog_id });
     if (!practice) {
+      const dialog = await Dialog.findOne({ dialog_id });
+      if (!dialog)
+        return res
+          .status(404)
+          .send({ error: "Can't find dialog: " + dialog_id });
+      dialog.user_sub = ""; // Don't leak other user's user_sub.
+      const lines = dialog.lines.map((line) => line.toJSON());
+      const echoes = lines.map((line) => {
+        return { line_id: line._id };
+      });
       const practiceParams = {
         user_sub,
         dialog_id,
         characterIdx: parseInt(characterIdx, 10),
-        echoes: [],
+        echoes: echoes,
+        dialog: dialog,
       };
       practice = await Practice.create(practiceParams);
     }
@@ -97,5 +108,26 @@ async function del(req, res) {
   }
 }
 
+async function updateEcho(req, res) {
+  const { practice_id, echo_id } = req.params; // dialog_id
+  const user_sub = req.auth.sub; // user_id
+  const { echoAudioUrl } = req.body;
+  try {
+    const echoParams = {
+      _id: echo_id,
+      echoAudioUrl,
+    };
+    const practice = await Practice.findOneAndUpdate(
+      { user_sub, _id: practice_id, "echoes._id": echo_id },
+      { $set: { "echoes.$": echoParams } },
+      { new: true }
+    );
+    res.send(practice);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ error: e });
+  }
+}
+
 // module.exports = { readOrCreate, updateEcho, deleteEcho, index };
-module.exports = { read, findOrCreate, update, del, index };
+module.exports = { read, findOrCreate, update, del, index, updateEcho };

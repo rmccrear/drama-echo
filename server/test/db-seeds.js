@@ -22,7 +22,24 @@ module.exports = {
     },
   ],
   lines: [
-    [],
+    [
+      {
+        content: "I'll no longer be a Capulet.",
+        characterIdx: 1,
+        audio: {
+          url: "https://cloudinary.com/1234J",
+          audio_id: "1234J",
+        },
+      },
+      {
+        content: "Shall I speak?",
+        characterIdx: 0,
+        audio: {
+          url: "https://cloudinary.com/1234R",
+          audio_id: "1234R",
+        },
+      },
+    ],
     [
       {
         content: "Promise me now.",

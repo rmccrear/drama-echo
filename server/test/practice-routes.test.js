@@ -100,4 +100,28 @@ describe("Test Practice Routes", () => {
     const resp2 = await request(app).get(`/api/v1/practice/${dialog_id}`); // get for user "1"
     expect(resp2.error.status).toBe(404);
   });
+  test("update Practice Echo", async () => {
+    // const user_sub = "1";
+    const dialog_id = testDialogs[0]._id.toString(); // dialog 0 does not have a practice yet, so we can create it.
+    characterIdx = 1;
+    const practiceParams = {
+      characterIdx,
+    };
+    const resp1 = await request(app)
+      .post(`/api/v1/practice/${dialog_id}`)
+      .send(practiceParams);
+    const practice = resp1.body;
+    const practice_id = practice._id;
+    const echoes = practice.echoes;
+    const myLines = practice.dialog.lines.filter(
+      (line) => line.characterIdx === characterIdx
+    );
+    // Find a line that matches my characterIdx, then find the echo for that line
+    const myEcho = echoes.find((echo) => echo.line_id === myLines[0].line_id);
+    const echo_id = myEcho._id;
+    myEcho.echoAudioUrl = "newaudiourl";
+    const resp2 = await request(app)
+      .put(`/api/v1/practice/${practice_id}/${echo_id}`)
+      .send(myEcho);
+  });
 });
