@@ -122,6 +122,7 @@ class LineEchoListingDisplay extends React.Component {
         {lineEchoes.map((lineEcho) => (
           <>
             <LineEcho
+              key={lineEcho.echo._id}
               className="m-3"
               lineEcho={lineEcho}
               myCharIdx={this.props.characterIdx}
