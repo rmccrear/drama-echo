@@ -1,5 +1,5 @@
 import { getApiFetcher } from "./api";
-import mockData from "../__test__/db-seeds";
+// import mockData from "../__test__/db-seeds";
 // import axios from "axios";
 
 //const fetchDialogsForUser = async (user_id) => {
@@ -34,10 +34,6 @@ const fetchDialog = (dialog_id) => {
     .catch((e) => {
       return { error: e.response };
     });
-};
-
-const fetchLinesForDialog = async (dialog_id) => {
-  return mockData.lines.filter((line) => line.dialog_id === dialog_id);
 };
 
 const createDialog = (dialogParams) => {
@@ -169,7 +165,6 @@ function getUploadSig(public_name) {
 export {
   fetchDialogsForUser,
   fetchDialog,
-  fetchLinesForDialog,
   createDialog,
   updateDialog,
   blankDialog,
