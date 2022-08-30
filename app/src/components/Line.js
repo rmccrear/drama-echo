@@ -61,13 +61,17 @@ class Line extends React.Component {
                     ""
                   )}
                 </div>
-                <Button
-                  className="line-edit-button"
-                  disabled={this.state.pending}
-                  onClick={(e) => this.setState({ editing: !editing })}
-                >
-                  Edit
-                </Button>
+                {this.props.status === "published" ? (
+                  ""
+                ) : (
+                  <Button
+                    className="line-edit-button"
+                    disabled={this.state.pending}
+                    onClick={(e) => this.setState({ editing: !editing })}
+                  >
+                    Edit
+                  </Button>
+                )}
               </Card.Body>
             </Card>
           ) : (

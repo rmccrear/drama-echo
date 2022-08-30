@@ -1,8 +1,8 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { Switch, Route, Link } from "react-router-dom";
-import { fetchDialog } from "../models/dialogs";
+import { Link } from "react-router-dom";
+import { fetchDialog, updateDialog } from "../models/dialogs";
 
 import LineListing from "./LineListing";
 
@@ -12,6 +12,7 @@ import withAuth from "../withAuth";
 class DialogView extends React.Component {
   constructor(props) {
     super(props);
+    this.handlePublish = this.handlePublish.bind(this);
     this.state = { loading: true };
   }
   async componentDidMount() {
@@ -23,6 +24,14 @@ class DialogView extends React.Component {
     } else {
       this.setState({ dialog: resp, loading: false });
     }
+  }
+  async handlePublish() {
+    await this.props.setupAccessToken();
+    const dialog_id = this.state.dialog._id;
+    const dialogParams = { status: "published" };
+    const updatedDialog = await updateDialog(dialog_id, dialogParams);
+    console.log(updatedDialog);
+    this.setState({ ...this.state, dialog: updatedDialog });
   }
 
   render() {
@@ -46,15 +55,32 @@ class DialogView extends React.Component {
             >
               OK
             </Button>
-            <Button
-              className="dialog-edit-button"
-              as={Link}
-              to={`/dialogs/${this.state.dialog._id}/edit`}
-              role="button"
-              style={{ float: "right" }}
-            >
-              Edit
-            </Button>
+            {this.state.dialog.status !== "published" ? (
+              <>
+                <Button
+                  className="dialog-edit-button"
+                  as={Link}
+                  to={`/dialogs/${this.state.dialog._id}/edit`}
+                  role="button"
+                  style={{ float: "right" }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="danger"
+                  className="dialog-publish-button"
+                  onClick={this.handlePublish}
+                  role="button"
+                  style={{ float: "right" }}
+                >
+                  Publish
+                </Button>
+              </>
+            ) : (
+              <Button disabled={true} style={{ float: "right" }}>
+                Published
+              </Button>
+            )}
           </Card.Body>
         </Card>
         <Card>

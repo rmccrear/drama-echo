@@ -21,7 +21,9 @@ class LineListing extends React.Component {
     this.state = { lines: this.props.lines };
   }
   componentDidMount() {
-    this.setState({ lines: this.state.lines });
+    this.setState({
+      lines: this.state.lines,
+    });
   }
   async handleCreateLine() {
     const line = await createLineOfDialog(this.props.dialog, blankLine());
@@ -68,12 +70,17 @@ class LineListing extends React.Component {
                 line={line}
                 audioPublicId={publicNameGen(this.props.dialog, line)}
                 characters={this.props.dialog.characters}
+                status={this.props.dialog.status}
               />
             </CSSTransition>
           ))}
         </TransitionGroup>
         <div>
-          <Button onClick={this.handleCreateLine}>Add Line + </Button>
+          {this.props.dialog && this.props.dialog.status === "published" ? (
+            ""
+          ) : (
+            <Button onClick={this.handleCreateLine}>Add Line + </Button>
+          )}
         </div>
       </div>
     );

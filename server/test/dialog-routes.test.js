@@ -115,4 +115,16 @@ describe("get Dialogs", () => {
     const resp8 = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp8.body.lines.length).toBe(0);
   });
+  test("updated dialog to published state", async () => {
+    const dialog_id = testDialogs[0]._id.toString();
+    //const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
+    //const dialog = resp.body
+    //dialog.status = 'published';
+    const resp2 = await request(app)
+      .put(`/api/v1/dialogs/${dialog_id}`)
+      .send({ status: "published" });
+    const updatedDialog = resp2.body;
+    console.log(updatedDialog);
+    expect(updatedDialog.status).toBe("published");
+  });
 });

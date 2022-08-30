@@ -11,6 +11,7 @@ const dialogSchema = new mongoose.Schema({
   characters: [String],
   user_sub: String,
   lines: [lineSchema],
+  status: String,
 });
 
 const Dialog = mongoose.model("Dialog", dialogSchema);
@@ -34,7 +35,11 @@ async function getDialog(user_sub, dialog_id) {
 }
 
 async function updateDialog(user_sub, dialog_id, dialog) {
-  return await Dialog.updateOne({ _id: dialog_id, user_sub }, { $set: dialog });
+  return await Dialog.findOneAndUpdate(
+    { _id: dialog_id, user_sub },
+    { $set: dialog },
+    { new: true }
+  );
 }
 
 module.exports = {

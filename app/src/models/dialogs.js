@@ -90,6 +90,7 @@ class Dialog {
     this.lines = d.lines || [];
     this._id = d._id;
     this.user_sub = d.user_sub;
+    this.status = d.status;
   }
 }
 

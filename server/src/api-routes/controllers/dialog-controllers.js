@@ -40,10 +40,15 @@ async function update(req, res) {
   const { sub } = req.auth; // user_id
   try {
     const d = req.body;
-    const dialogParams = { title: d.title, characters: d.characters };
+    const dialogParams = {
+      title: d.title,
+      characters: d.characters,
+      status: d.status,
+    };
+    console.log(dialogParams);
     const dialog_id = id;
-    await updateDialog(sub, dialog_id, dialogParams);
-    res.send({ message: "Update dialog ", id });
+    const dialog = await updateDialog(sub, dialog_id, dialogParams);
+    res.send(dialog);
   } catch (e) {
     console.log(e);
     res.status(400).send({ error: "Error updating dialog " + id });
@@ -84,4 +89,20 @@ async function del(req, res) {
   }
 }
 
-module.exports = { create, update, read, del, index };
+// get dialogs for user to try
+async function dialogFeed(req, res) {
+  // TODO: randomize or personalize
+  // TODO: only grab dialogs marked "public" and "published"
+  try {
+    //Get the dialog feed:
+    const dialogs = await Dialog.find({}).limit(20).exec();
+    // scrub out user_sub data
+    dialogs.forEach((d) => (d.user_sub = ""));
+    res.send(dialogs);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ error: "Error fetching dialog feed " });
+  }
+}
+
+module.exports = { create, update, read, del, index, dialogFeed };
