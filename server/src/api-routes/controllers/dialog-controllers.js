@@ -95,7 +95,7 @@ async function dialogFeed(req, res) {
   // TODO: only grab dialogs marked "public" and "published"
   try {
     //Get the dialog feed:
-    const dialogs = await Dialog.find({}).limit(20).exec();
+    const dialogs = await Dialog.find({ status: "published" }).limit(20).exec();
     // scrub out user_sub data
     dialogs.forEach((d) => (d.user_sub = ""));
     res.send(dialogs);

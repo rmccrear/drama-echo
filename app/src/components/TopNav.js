@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import AuthNavBar from "./AuthNavBar";
 
-import { Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class TopNav extends React.Component {
   render() {
@@ -18,6 +18,9 @@ class TopNav extends React.Component {
             <Nav>
               <Nav.Link as={Link} to="dialogs">
                 My Dialogs
+              </Nav.Link>
+              <Nav.Link as={Link} to="echoes">
+                My Echos
               </Nav.Link>
               <AuthNavBar />
             </Nav>

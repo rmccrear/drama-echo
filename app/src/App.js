@@ -13,6 +13,9 @@ import Home from "./routes/home";
 import DialogRoute from "./routes/dialogs";
 import MyProfileRoute from "./routes/my-profile";
 
+import EchoHome from "./components/echo-components/EchoHome";
+import EchoDialog from "./components/echo-components/EchoDialog";
+
 //import withAuth from "./withAuth";
 //const TopNavWithAuth = withAuth(TopNav);
 
@@ -27,6 +30,9 @@ class App extends React.Component {
           <Route path="dialogs/new" element={<DialogCreate />} />
           <Route path="dialogs/:dialog_id/edit" element={<DialogUpdate />} />
           <Route path="dialogs/:dialog_id" element={<DialogView />} />
+          <Route path="echoes" element={<EchoHome />} />
+          <Route path="echo" element={<EchoHome />} />
+          <Route path="echo/:dialog_id" element={<EchoDialog />} />
           <Route path="my-profile" element={<MyProfileRoute />} />
         </Routes>
       </div>

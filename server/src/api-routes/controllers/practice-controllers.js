@@ -22,7 +22,10 @@ async function index(req, res) {
 async function findOrCreate(req, res) {
   const { dialog_id } = req.params; // dialog_id
   const user_sub = req.auth.sub; // user_id
-  const { characterIdx } = req.body;
+  const cIdx = req.body.characterIdx;
+  const characterIdx = !Number.isNaN(parseInt(cIdx, 10)) //if no characaterIdx, we will ask for it later from the user.
+    ? parseInt(cIdx, 10)
+    : -1;
   try {
     let practice = await Practice.findOne({ user_sub, dialog_id });
     if (!practice) {
@@ -39,10 +42,11 @@ async function findOrCreate(req, res) {
       const practiceParams = {
         user_sub,
         dialog_id,
-        characterIdx: parseInt(characterIdx, 10),
+        characterIdx: characterIdx,
         echoes: echoes,
         dialog: dialog,
       };
+      console.log(practiceParams);
       practice = await Practice.create(practiceParams);
     }
     res.send(practice);

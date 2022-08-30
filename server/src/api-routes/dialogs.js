@@ -8,6 +8,7 @@ const {
   update,
   del,
   index,
+  dialogFeed,
 } = require("./controllers/dialog-controllers");
 
 const lineRoutes = require("./controllers/dialog-line-controllers");
@@ -67,6 +68,8 @@ dialogRoutes.route("/api/v1/practice/:practice_id").delete(practiceRoutes.del);
 dialogRoutes
   .route("/api/v1/practice/:practice_id/:echo_id")
   .put(practiceRoutes.updateEcho);
+
+dialogRoutes.route("/api/v1/dialog-feed").get(dialogFeed);
 /*
 dialogRoutes
   .route("/api/v1/practice/:dialog_id/echo/new")
