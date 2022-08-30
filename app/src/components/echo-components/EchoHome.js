@@ -1,9 +1,6 @@
 import React from "react";
 
 import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
 
 import withAuth from "../../withAuth";
 import withParams from "../../withParams";

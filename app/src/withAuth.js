@@ -1,17 +1,17 @@
 import React from "react";
 
-import { fetchUser } from "./models/user";
-
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { setupEchoDialogAuth } from "./models/api";
 
+/*
 const withAuthDev = (Component) => {
   return (props) => {
     const user = fetchUser();
     return <Component {...props} user={user} />;
   };
 };
+*/
 
 const withAuth = (Component) => {
   return (props) => {

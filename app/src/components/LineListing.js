@@ -35,8 +35,7 @@ class LineListing extends React.Component {
     if (!result.error) {
       const line = result;
       const line_id = line._id;
-      console.log(result);
-      const idx = this.state.lines.findIndex((l) => l._id === line._id);
+      const idx = this.state.lines.findIndex((l) => l._id === line_id);
       this.state.lines[idx] = line;
       this.state.lines = Array.from(this.state.lines);
       console.log({ ...this.state.lines });

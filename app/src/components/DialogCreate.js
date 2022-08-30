@@ -21,7 +21,6 @@ class DialogCreate extends React.Component {
     this.props.navigate(`/dialogs/${dialogId}`);
   }
   cancelEdit() {
-    const dialogId = this.props.params.dialog_id;
     this.props.navigate(`/dialogs`);
   }
   render() {

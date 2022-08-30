@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Line as LineObj } from "../models/dialogs";
-import Uploader, { publicNameGen } from "./CloudinaryUploader";
+import Uploader from "./CloudinaryUploader";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import "./Line.scss";
@@ -120,7 +120,6 @@ class LineForm extends React.Component {
     this.props.handleDeleteLine(this.props.line);
   }
   handleUploadedFile(file) {
-    this.state.line.audioUrl = file.secure_url;
     const newLine = { ...this.state.line, audioUrl: file.secure_url };
     this.props.handleUpdateLine(newLine);
     this.setState({ ...this.state, line: newLine });

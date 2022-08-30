@@ -1,18 +1,19 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
-import cloudinary from "cloudinary-core";
+// import cloudinary from "cloudinary-core";
 import withAuth from "../withAuth";
 import { getUploadSig } from "../models/dialogs";
 
 const remoteCloudinaryFolder =
   process.env.REACT_APP_CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
 
+/*
 const cl = new cloudinary.Cloudinary({
   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
   secure: true,
 });
+*/
 
 function uploadFile(file, signData, publicId) {
   const formData = new FormData();
