@@ -13,8 +13,9 @@ const GetStartedButton = (props) => {
   return !isAuthenticated ? (
     <Button onClick={() => loginWithRedirect()}>Get Started</Button>
   ) : (
-    <div className="container">
+    <div className="container w-75">
       <Card>
+        <Card.Header>Welcome to Dialgo Echo</Card.Header>
         <Card.Body>
           <Button as={Link} to="/dialogs" className="m-3 float-start">
             I am a teacher.
@@ -39,9 +40,7 @@ class HomeRoute extends React.Component {
         <header>
           <h1> Drama Echo </h1>
           <p> Practice pronunciation with friends or alone. </p>
-          <p>
-            <GetStartedButton />
-          </p>
+          <GetStartedButton className="m-3" />
         </header>
       </React.Fragment>
     );

@@ -13,6 +13,7 @@ class DialogView extends React.Component {
   constructor(props) {
     super(props);
     this.handlePublish = this.handlePublish.bind(this);
+    this.handleUnpublish = this.handleUnpublish.bind(this);
     this.state = { loading: true };
   }
   async componentDidMount() {
@@ -29,6 +30,14 @@ class DialogView extends React.Component {
     await this.props.setupAccessToken();
     const dialog_id = this.state.dialog._id;
     const dialogParams = { status: "published" };
+    const updatedDialog = await updateDialog(dialog_id, dialogParams);
+    console.log(updatedDialog);
+    this.setState({ ...this.state, dialog: updatedDialog });
+  }
+  async handleUnpublish() {
+    await this.props.setupAccessToken();
+    const dialog_id = this.state.dialog._id;
+    const dialogParams = { status: "unpublished" };
     const updatedDialog = await updateDialog(dialog_id, dialogParams);
     console.log(updatedDialog);
     this.setState({ ...this.state, dialog: updatedDialog });
@@ -58,7 +67,7 @@ class DialogView extends React.Component {
             {this.state.dialog.status !== "published" ? (
               <>
                 <Button
-                  className="dialog-edit-button"
+                  className="dialog-edit-button m-1"
                   as={Link}
                   to={`/dialogs/${this.state.dialog._id}/edit`}
                   role="button"
@@ -68,7 +77,7 @@ class DialogView extends React.Component {
                 </Button>
                 <Button
                   variant="danger"
-                  className="dialog-publish-button"
+                  className="dialog-publish-button m-1"
                   onClick={this.handlePublish}
                   role="button"
                   style={{ float: "right" }}
@@ -77,9 +86,23 @@ class DialogView extends React.Component {
                 </Button>
               </>
             ) : (
-              <Button disabled={true} style={{ float: "right" }}>
-                Published
-              </Button>
+              <>
+                <Button
+                  onClick={this.handleUnpublish}
+                  style={{ float: "right" }}
+                  className="m-1"
+                  variant="warning"
+                >
+                  Unpublish
+                </Button>
+                <Button
+                  disabled={true}
+                  style={{ float: "right" }}
+                  className="m-1"
+                >
+                  Published
+                </Button>
+              </>
             )}
           </Card.Body>
         </Card>
