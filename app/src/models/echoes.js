@@ -33,4 +33,14 @@ async function setCharacterIdxForPratice(characterIdx, practice_id) {
     });
 }
 
-export { getDialogFeed, getPracticeFromDialogId, setCharacterIdxForPratice };
+const genLinkToEcho = (dialog_id) => {
+  const { protocol, host, port } = window.location;
+  return `${protocol}//${host}/echo/${dialog_id}`;
+};
+
+export {
+  getDialogFeed,
+  getPracticeFromDialogId,
+  setCharacterIdxForPratice,
+  genLinkToEcho,
+};

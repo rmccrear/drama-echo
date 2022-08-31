@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { fetchDialog, updateDialog } from "../models/dialogs";
+import { genLinkToEcho } from "../models/echoes";
 
 import LineListing from "./LineListing";
 
@@ -86,7 +87,7 @@ class DialogView extends React.Component {
                 </Button>
               </>
             ) : (
-              <>
+              <div>
                 <Button
                   onClick={this.handleUnpublish}
                   style={{ float: "right" }}
@@ -102,7 +103,15 @@ class DialogView extends React.Component {
                 >
                   Published
                 </Button>
-              </>
+                <div style={{ clear: "both" }}>
+                  <p style={{ clear: "both" }}>
+                    View at:{" "}
+                    <a href={genLinkToEcho(this.state.dialog._id)}>
+                      {genLinkToEcho(this.state.dialog._id)}
+                    </a>
+                  </p>
+                </div>
+              </div>
             )}
           </Card.Body>
         </Card>
