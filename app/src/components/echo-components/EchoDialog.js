@@ -26,21 +26,33 @@ class EchoDialog extends React.Component {
       lineEchoes: [],
     };
   }
+  async fetchAndInitializePractice(dialog_id) {
+    console.log("starting componentDidMount", this.props);
+    const practice = await getPracticeFromDialogId(dialog_id);
+    console.log("finish getPracticeFromDialogId", practice);
+    this.setState({
+      ...this.state,
+      practice,
+      lineEchoes: this.myEchoes(practice.echoes, practice.dialog.lines),
+      loading: false,
+    });
+    return practice;
+  }
   async componentDidMount() {
     await this.props.setupAccessToken();
     const dialog_id = this.props.params.dialog_id;
-    let practice;
     try {
-      practice = await getPracticeFromDialogId(dialog_id);
-      console.log(practice);
-      this.setState({
-        ...this.state,
-        practice,
-        lineEchoes: this.myEchoes(practice.echoes, practice.dialog.lines),
-        loading: false,
-      });
+      await this.fetchAndInitializePractice(dialog_id);
     } catch (e) {
       console.log(e);
+      // compoementDidMount my be called twice when loading,
+      // which can cause a server error because of a unique constraint
+      // when accessing the firt time.
+      // Try again in case of slow network or server error
+      let tries = 0;
+      const maxTries = 3;
+      while (!this.state.practice.dialogs && tries < maxTries)
+        await this.fetchAndInitializePractice(dialog_id);
     }
   }
   async handleCharacterSelect(characterIdx) {

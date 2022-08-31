@@ -20,6 +20,8 @@ async function index(req, res) {
 */
 // we will try to keep this unique
 async function findOrCreate(req, res) {
+  const s = Date.now();
+
   const { dialog_id } = req.params; // dialog_id
   const user_sub = req.auth.sub; // user_id
   const cIdx = req.body.characterIdx;
@@ -36,7 +38,6 @@ async function findOrCreate(req, res) {
           .status(404)
           .send({ error: "Can't find dialog: " + dialog_id });
       dialog.user_sub = ""; // Don't leak other user's user_sub.
-      console.log(dialog);
       const lines = dialog.lines.map((line) => line.toJSON());
       const echoes = lines.map((line) => {
         return { line_id: line._id };
@@ -48,7 +49,6 @@ async function findOrCreate(req, res) {
         echoes: echoes,
         dialog: dialog,
       };
-      console.log(practiceParams);
       practice = await Practice.create(practiceParams);
     }
     res.send(practice);

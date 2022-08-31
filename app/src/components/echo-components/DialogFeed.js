@@ -24,7 +24,6 @@ class DialogFeed extends React.Component {
         <div class="row">
           {this.state.dialogs.map((dialog) => (
             <div class="col-sm-6 p-2">
-              {" "}
               <DialogDisplay key={dialog._id} dialog={dialog} />
             </div>
           ))}

@@ -9,7 +9,7 @@ const lineSchema = new mongoose.Schema({
 const dialogSchema = new mongoose.Schema({
   title: String,
   characters: [String],
-  user_sub: String,
+  user_sub: { type: String, index: true },
   lines: [lineSchema],
   status: String,
 });
