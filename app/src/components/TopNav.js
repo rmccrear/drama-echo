@@ -20,7 +20,7 @@ class TopNav extends React.Component {
                 My Dialogs
               </Nav.Link>
               <Nav.Link as={Link} to="echoes">
-                My Echos
+                My Echoes
               </Nav.Link>
               <AuthNavBar />
             </Nav>
