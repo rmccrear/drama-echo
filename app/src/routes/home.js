@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import "./home.scss";
 // import withAuth from "../withAuth";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -12,9 +13,18 @@ const GetStartedButton = (props) => {
   return !isAuthenticated ? (
     <Button onClick={() => loginWithRedirect()}>Get Started</Button>
   ) : (
-    <Button as={Link} to="/dialogs">
-      My Dialogs
-    </Button>
+    <div className="container">
+      <Card>
+        <Card.Body>
+          <Button as={Link} to="/dialogs" className="m-3 float-start">
+            I am a teacher.
+          </Button>
+          <Button as={Link} to="/echoes" className="m-3 float-end">
+            I am a student.
+          </Button>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 
