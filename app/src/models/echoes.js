@@ -27,7 +27,7 @@ async function getPracticeFromDialogId(dialog_id) {
 async function setCharacterIdxForPratice(characterIdx, practice_id) {
   const axios = getApiFetcher();
   return axios
-    .put(`/practice/${practice_id}`, { characterIdx }) // This does a "get or create"
+    .put(`/practice/${practice_id}`, { characterIdx })
     .then((resp) => {
       return resp.data;
     });

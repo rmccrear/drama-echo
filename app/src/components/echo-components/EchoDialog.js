@@ -51,20 +51,23 @@ class EchoDialog extends React.Component {
       // Try again in case of slow network or server error
       let tries = 0;
       const maxTries = 3;
-      while (!this.state.practice.dialogs && tries < maxTries)
+      while (!this.state.practice.dialog && tries < maxTries) {
         await this.fetchAndInitializePractice(dialog_id);
+        tries = tries + 1;
+      }
     }
   }
   async handleCharacterSelect(characterIdx) {
+    console.log(this.state);
     this.setState({ ...this.state, loading: true });
     await setCharacterIdxForPratice(characterIdx, this.state.practice._id);
-    this.state.practice.characterIdx = characterIdx;
+    //this.state.practice.characterIdx = characterIdx;
+    const practice = { ...this.state.practice, characterIdx };
     this.setState({
       ...this.state,
       loading: false,
-      lineEchoes: this.myEchoes(),
+      practice,
     });
-    console.log(this.myEchoes());
   }
   myEchoes(echoes, lines) {
     console.log(echoes, lines);
@@ -128,7 +131,6 @@ class LineEchoListingDisplay extends React.Component {
   }
   render() {
     const lineEchoes = this.props.lineEchoes;
-    console.log(lineEchoes.length);
     return (
       <>
         {lineEchoes.map((lineEcho) => (
@@ -148,7 +150,6 @@ class LineEchoListingDisplay extends React.Component {
 }
 
 const LineEcho = (props) => {
-  console.log(props.lineEcho);
   if (props.myCharIdx === props.lineEcho.line.characterIdx) {
     return <LineMine {...props} />;
   } else {
