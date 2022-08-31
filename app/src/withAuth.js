@@ -13,6 +13,9 @@ const withAuthDev = (Component) => {
 };
 */
 
+let AUTH_TOKEN_CACHE;
+let AUTH_TOKEN_CACHE_EXP;
+
 const withAuth = (Component) => {
   return (props) => {
     const myAuth0 = useAuth0();
@@ -20,13 +23,16 @@ const withAuth = (Component) => {
       myAuth0;
 
     const setupAccessToken = () => {
-      console.log("trying to get Token");
+      if (AUTH_TOKEN_CACHE && Date.now() < AUTH_TOKEN_CACHE_EXP) {
+        return Promise.resolve(AUTH_TOKEN_CACHE);
+      }
       return getAccessTokenSilently()
         .then((AUTH_TOKEN) => {
           //getIdTokenClaims().then((ID_TOKEN)=>{
           // const TOKEN = ID_TOKEN__raw;
           const TOKEN = AUTH_TOKEN;
-          console.log(TOKEN);
+          AUTH_TOKEN_CACHE = TOKEN;
+          AUTH_TOKEN_CACHE_EXP = Date.now() + 80000;
           setupEchoDialogAuth({ token: TOKEN });
         })
         .catch((e) => {
