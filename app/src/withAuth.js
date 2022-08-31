@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, loginWithRedirect } from "@auth0/auth0-react";
 
 import { setupEchoDialogAuth } from "./models/api";
 
@@ -31,6 +31,9 @@ const withAuth = (Component) => {
         })
         .catch((e) => {
           console.log(e);
+          if (e.message === "Login required") {
+            myAuth0.loginWithRedirect();
+          }
           return e;
         });
     };
