@@ -15,6 +15,12 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// route to check if server is awake
+app.get("/api/v1", function (req, res) {
+  return res.json({ message: "Hello." });
+});
+
 /*
 const jwksUri=process.env.JWKS_URI;
 const issuer=process.env.JWT_ISSUER;
@@ -40,6 +46,7 @@ app.use(dialogRoutes);
 app.get("/api/v1/my-profile", jwtCheck, function (req, res) {
   return res.json({ message: "OK", username: req.auth.nickname });
 });
+
 /*
 const startServer = async () => {
   try {
