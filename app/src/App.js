@@ -18,6 +18,14 @@ import EchoDialog from "./components/echo-components/EchoDialog";
 
 //import withAuth from "./withAuth";
 //const TopNavWithAuth = withAuth(TopNav);
+import withProtect from "./withProtect";
+const ProtectedDialogRoute = withProtect(DialogRoute);
+const ProtectedEchoDialog = withProtect(EchoDialog);
+const ProtectedEchoHome = withProtect(EchoHome);
+const ProtectedDialogCreate = withProtect(DialogCreate);
+const ProtectedDialogUpdate = withProtect(DialogUpdate);
+const ProtectedMyProfileRoute = withProtect(MyProfileRoute);
+const ProtectedDialogView = withProtect(DialogView);
 
 class App extends React.Component {
   render() {
@@ -26,14 +34,17 @@ class App extends React.Component {
         <TopNav />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="dialogs" element={<DialogRoute />} />
-          <Route path="dialogs/new" element={<DialogCreate />} />
-          <Route path="dialogs/:dialog_id/edit" element={<DialogUpdate />} />
-          <Route path="dialogs/:dialog_id" element={<DialogView />} />
-          <Route path="echoes" element={<EchoHome />} />
-          <Route path="echo" element={<EchoHome />} />
-          <Route path="echo/:dialog_id" element={<EchoDialog />} />
-          <Route path="my-profile" element={<MyProfileRoute />} />
+          <Route path="dialogs" element={<ProtectedDialogRoute />} />
+          <Route path="dialogs/new" element={<ProtectedDialogCreate />} />
+          <Route
+            path="dialogs/:dialog_id/edit"
+            element={<ProtectedDialogUpdate />}
+          />
+          <Route path="dialogs/:dialog_id" element={<ProtectedDialogView />} />
+          <Route path="echoes" element={<ProtectedEchoHome />} />
+          <Route path="echo" element={<ProtectedEchoHome />} />
+          <Route path="echo/:dialog_id" element={<ProtectedEchoDialog />} />
+          <Route path="my-profile" element={<ProtectedMyProfileRoute />} />
         </Routes>
       </div>
     );
