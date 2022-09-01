@@ -34,7 +34,7 @@ async function setCharacterIdxForPratice(characterIdx, practice_id) {
 }
 
 const genLinkToEcho = (dialog_id) => {
-  const { protocol, host, port } = window.location;
+  const { protocol, host } = window.location;
   return `${protocol}//${host}/echo/${dialog_id}`;
 };
 
