@@ -18,9 +18,13 @@ let AUTH_TOKEN_CACHE_EXP;
 
 const withAuth = (Component) => {
   return (props) => {
-    const myAuth0 = useAuth0();
-    const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
-      myAuth0;
+    const {
+      user,
+      isAuthenticated,
+      isLoading,
+      getAccessTokenSilently,
+      loginWithRedirect,
+    } = useAuth0();
 
     const setupAccessToken = () => {
       if (AUTH_TOKEN_CACHE && Date.now() < AUTH_TOKEN_CACHE_EXP) {
@@ -38,7 +42,9 @@ const withAuth = (Component) => {
         .catch((e) => {
           console.log(e);
           if (e.message === "Login required") {
-            myAuth0.loginWithRedirect();
+            loginWithRedirect({
+              appState: { returnTo: window.location.pathname },
+            });
           }
           return e;
         });

@@ -32,6 +32,7 @@ function withMediaRecorder(Component) {
       if (mediaRecorder.state !== "recording") mediaRecorder.start();
       setMediaRecorderState(mediaRecorder.state);
     }
+    // Stop recording and return the recording as a blob wrapped in a promise.
     function stopRecording() {
       return new Promise((resolve, reject) => {
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
