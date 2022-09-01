@@ -1,5 +1,9 @@
 import React from "react";
 
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 import withAuth from "../../withAuth";
 import withParams from "../../withParams";
 import { getDialogFeed } from "../../models/echoes";
@@ -13,22 +17,20 @@ class DialogFeed extends React.Component {
   async componentDidMount() {
     await this.props.setupAccessToken();
     const dialogs = await getDialogFeed(this.props.excludedDialogs); // exclude dialogs that we have already started from the feed.
-    console.log(dialogs);
     this.setState({ ...this.state, dialogs });
   }
   render() {
-    console.log(this.state.dialogs);
     return (
-      <div className="container">
+      <Container>
         <h1>Dialog Feed</h1>
-        <div class="row">
+        <Row className="justify-content-center">
           {this.state.dialogs.map((dialog) => (
-            <div class="col-sm-6 p-2">
-              <DialogDisplay key={dialog._id} dialog={dialog} />
-            </div>
+            <Col key={dialog._id}>
+              <DialogDisplay dialog={dialog} />
+            </Col>
           ))}
-        </div>
-      </div>
+        </Row>
+      </Container>
     );
   }
 }
