@@ -146,23 +146,6 @@ function deleteLineOfDialog(dialog, line) {
     });
 }
 
-function getUploadSig(public_name) {
-  const axios = getApiFetcher();
-  // const public_name = `${dialog._id}--${line._id}`;
-  let url;
-  if (public_name) url = `/signuploadform/${public_name}`;
-  else url = `/signuploadform`;
-  return axios
-    .get(url)
-    .then((result) => {
-      return result.data;
-    })
-    .catch((e) => {
-      console.log(e);
-      return { error: e };
-    });
-}
-
 export {
   fetchDialogsForUser,
   fetchDialog,
@@ -176,5 +159,4 @@ export {
   updateLineOfDialog,
   deleteLineOfDialog,
   blankLine,
-  getUploadSig,
 };

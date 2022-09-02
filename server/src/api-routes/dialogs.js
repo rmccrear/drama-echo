@@ -54,8 +54,8 @@ dialogRoutes
   .delete(lineRoutes.del);
 
 const { sign } = require("./controllers/cloudinary-controller");
-dialogRoutes.route("/api/v1/signuploadform").get(sign);
-dialogRoutes.route("/api/v1/signuploadform/:public_id").get(sign);
+// dialogRoutes.route("/api/v1/signuploadform").get(sign);
+dialogRoutes.route("/api/v1/signuploadform/:upload_type/:public_id").get(sign);
 
 // use the dialog_id and the user_sub to find the practice document
 dialogRoutes.route("/api/v1/practice").get(practiceRoutes.index);

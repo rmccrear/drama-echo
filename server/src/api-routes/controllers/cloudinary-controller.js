@@ -27,12 +27,14 @@ const apiKey = cloudinary.config().api_key;
 
 // using this API should require authentication
 async function sign(req, res) {
-  const { public_id } = req.params;
+  /* uploadType = "echodialog_lines | echodialog_echoes | echodialog_demos" */
+  const { public_id, upload_type } = req.params;
+
   const { sub } = req.auth; // user_id
   // verify public_id format is dialog_id--line_id
   if (public_id) {
     try {
-      const isValid = await validatePublicId(sub, public_id);
+      const isValid = await validatePublicId(sub, public_id, upload_type);
       if (!isValid) return res.status(400).send({ error: "Invalid public_id" });
     } catch (e) {
       return res.status(400).send({ error: e });
@@ -53,19 +55,30 @@ async function sign(req, res) {
     res.status(400).send({ error: e });
   }
 }
-
-async function validatePublicId(user_sub, public_id) {
-  [dialog_id, line_id] = public_id.split("--");
-  if (
-    mongoose.Types.ObjectId.isValid(dialog_id) &&
-    mongoose.Types.ObjectId.isValid(line_id)
-  ) {
-    dialog = await Dialog.findOne({ user_sub, _id: dialog_id });
-    if (dialog) {
-      return true;
+/*
+  for upload_type === "echodialogs_lines"
+    public_id === echodialogs_lines/{dialog_id}--{line_id} (where dialog_id is owned by current user)
+  for upload_type === "echodialogs_demos"
+    public_id === echodialogs_demos/{dialog_id} (where dialog_id is owned by current user)
+  for upload_type === "echodialogs__echo"
+    public_id === echodialogs_echoes/{practice_id}--echo_id (where practice_id is owned by current user)
+*/
+async function validatePublicId(user_sub, public_id, upload_type) {
+  if (upload_type === "echodialog_lines") {
+    const sections = public_id.split("--");
+    [dialog_id, line_id] = sections;
+    if (
+      mongoose.Types.ObjectId.isValid(dialog_id) &&
+      mongoose.Types.ObjectId.isValid(line_id) &&
+      sections.length === 2
+    ) {
+      dialog = await Dialog.findOne({ user_sub, _id: dialog_id });
+      if (dialog) {
+        return true;
+      }
     }
+    return false;
   }
-  return false;
 }
 
 function mediaPublicIdGen(dialog_id, line_id) {

@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 
 // import cloudinary from "cloudinary-core";
 import withAuth from "../withAuth";
-import { getUploadSig } from "../models/dialogs";
+import { getApiFetcher } from "../models/api";
 
 const remoteCloudinaryFolder =
   process.env.REACT_APP_CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
@@ -15,6 +15,24 @@ const cl = new cloudinary.Cloudinary({
 });
 */
 
+function getUploadSig(public_name, upload_type) {
+  const axios = getApiFetcher();
+  // const public_name = `${dialog._id}--${line._id}`;
+  let url;
+  if (public_name) url = `/signuploadform/${upload_type}/${public_name}`;
+  else url = `/signuploadform`;
+  return axios
+    .get(url)
+    .then((result) => {
+      return result.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      return { error: e };
+    });
+}
+
+// uploadType = "echodialog_lines | echodialog_echoes | echodialog_demos"
 function uploadFile(file, signData, publicId) {
   const formData = new FormData();
   const url =
@@ -52,7 +70,7 @@ class CloudinaryUploader extends React.Component {
   async sign() {
     await this.props.setupAccessToken();
     const publicId = this.props.publicId;
-    const sig = await getUploadSig(publicId);
+    const sig = await getUploadSig(publicId, "echodialog_lines");
     return sig;
   }
   async handleChange(e) {
@@ -61,7 +79,12 @@ class CloudinaryUploader extends React.Component {
     const publicId = this.props.publicId;
     if (e.target.files.length === 1) {
       const file = e.target.files[0];
-      const uploadedFile = await uploadFile(file, sig, publicId);
+      const uploadedFile = await uploadFile(
+        file,
+        sig,
+        publicId,
+        "echodialog_lines"
+      );
       console.log(uploadedFile);
       this.props.handleUploadedFile(uploadedFile);
     }
