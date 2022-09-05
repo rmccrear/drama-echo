@@ -60,6 +60,8 @@ const resetMockCalls = () => {
   deleteCalled = jest.fn();
 };
 
+const wakeUpServer = jest.fn();
+
 export {
   setupEchoDialogAuth,
   getApiFetcher,
@@ -68,4 +70,5 @@ export {
   putCalled,
   deleteCalled,
   resetMockCalls,
+  wakeUpServer,
 };
