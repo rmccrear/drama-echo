@@ -27,9 +27,7 @@ class EchoDialog extends React.Component {
     };
   }
   async fetchAndInitializePractice(dialog_id) {
-    console.log("starting componentDidMount", this.props);
     const practice = await getPracticeFromDialogId(dialog_id);
-    console.log("finish getPracticeFromDialogId", practice);
     this.setState({
       ...this.state,
       practice,
@@ -70,12 +68,9 @@ class EchoDialog extends React.Component {
     });
   }
   myEchoes(echoes, lines) {
-    console.log(echoes, lines);
     return echoes.map((echo, idx) => ({ echo: echo, line: lines[idx] }));
   }
   render() {
-    console.log(this.props);
-    console.log(this.state);
     return this.state.loading ? (
       "loading..."
     ) : this.state.practice.characterIdx === -1 ? (
@@ -125,10 +120,6 @@ class EchoDialog extends React.Component {
 }
 
 class LineEchoListingDisplay extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(props.lineEchoes);
-  }
   render() {
     const lineEchoes = this.props.lineEchoes;
     return (
