@@ -134,15 +134,13 @@ class LineEchoListingDisplay extends React.Component {
     return (
       <>
         {lineEchoes.map((lineEcho) => (
-          <>
-            <LineEcho
-              key={lineEcho.echo._id}
-              className="m-3"
-              lineEcho={lineEcho}
-              myCharIdx={this.props.characterIdx}
-              characters={this.props.characters}
-            />
-          </>
+          <LineEcho
+            key={lineEcho.echo._id}
+            className="m-3"
+            lineEcho={lineEcho}
+            myCharIdx={this.props.characterIdx}
+            characters={this.props.characters}
+          />
         ))}
       </>
     );
@@ -175,12 +173,16 @@ const LineYours = (props) => {
 };
 
 const charFromIdx = (characters, idx) => characters[idx];
-const LineMine = (props) => {
+// LineMine needs withMediaRecorder because we want to call initUserMedia just after the
+// record button appears, but before the use clicks on the record button. This is
+// to avoid the permission popup interfering with the actual recording.
+const LineMine = withMediaRecorder((props) => {
   const [donePlaying, setDonePlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioMime, setAudioMime] = useState(null);
   const handleOnPause = (e) => {
     setDonePlaying(true);
+    props.initUserMedia();
   };
   const handleBlob = (blobAndType) => {
     const [blob, type] = blobAndType;
@@ -226,7 +228,7 @@ const LineMine = (props) => {
       </div>
     </div>
   );
-};
+});
 
 const AudioMedia = (props) => {
   return (
