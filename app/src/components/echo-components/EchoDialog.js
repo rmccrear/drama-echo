@@ -27,9 +27,7 @@ class EchoDialog extends React.Component {
     };
   }
   async fetchAndInitializePractice(dialog_id) {
-    console.log("starting componentDidMount", this.props);
     const practice = await getPracticeFromDialogId(dialog_id);
-    console.log("finish getPracticeFromDialogId", practice);
     this.setState({
       ...this.state,
       practice,
@@ -58,7 +56,6 @@ class EchoDialog extends React.Component {
     }
   }
   async handleCharacterSelect(characterIdx) {
-    console.log(this.state);
     this.setState({ ...this.state, loading: true });
     await setCharacterIdxForPratice(characterIdx, this.state.practice._id);
     //this.state.practice.characterIdx = characterIdx;
@@ -70,12 +67,9 @@ class EchoDialog extends React.Component {
     });
   }
   myEchoes(echoes, lines) {
-    console.log(echoes, lines);
     return echoes.map((echo, idx) => ({ echo: echo, line: lines[idx] }));
   }
   render() {
-    console.log(this.props);
-    console.log(this.state);
     return this.state.loading ? (
       "loading..."
     ) : this.state.practice.characterIdx === -1 ? (
@@ -125,10 +119,6 @@ class EchoDialog extends React.Component {
 }
 
 class LineEchoListingDisplay extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(props.lineEchoes);
-  }
   render() {
     const lineEchoes = this.props.lineEchoes;
     return (
@@ -155,18 +145,16 @@ const LineEcho = (props) => {
   }
 };
 
-const LineYours = (props) => {
+const LineYours = ({ characters, lineEcho }) => {
   return (
     <div
       className="speech-bubble-outer float-end clearfix"
       style={{ width: "60%" }}
     >
       <div className="speech-bubble-yours  ">
-        <strong>
-          {charFromIdx(props.characters, props.lineEcho.line.characterIdx)}
-        </strong>
-        <p>{props.lineEcho.line.content}</p>
-        <AudioMedia audioUrl={props.lineEcho.line.audioUrl} controls={true} />
+        <strong>{charFromIdx(characters, lineEcho.line.characterIdx)}</strong>
+        <p>{lineEcho.line.content}</p>
+        <AudioMedia audioUrl={lineEcho.line.audioUrl} controls={true} />
       </div>
     </div>
   );
@@ -176,69 +164,77 @@ const charFromIdx = (characters, idx) => characters[idx];
 // LineMine needs withMediaRecorder because we want to call initUserMedia just after the
 // record button appears, but before the use clicks on the record button. This is
 // to avoid the permission popup interfering with the actual recording.
-const LineMine = withMediaRecorder((props) => {
-  const [donePlaying, setDonePlaying] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
-  const [audioMime, setAudioMime] = useState(null);
-  const handleOnPause = (e) => {
-    setDonePlaying(true);
-    props.initUserMedia();
-  };
-  const handleBlob = (blobAndType) => {
-    const [blob, type] = blobAndType;
-    const url = window.URL.createObjectURL(blob);
-    setAudioUrl(url);
-    setAudioMime(type);
-  };
-  return (
-    <div
-      className="speech-bubble-outer float-start clearfix"
-      style={{ width: "60%" }}
-    >
-      <div className="speech-bubble-mine ">
-        <p>
-          <strong>
-            {charFromIdx(props.characters, props.lineEcho.line.characterIdx)}{" "}
-            (You)
-          </strong>
-        </p>
-        <p>
-          {donePlaying && <strong>Say: </strong>}
-          {props.lineEcho.line.content}
-        </p>
-        {!donePlaying ? (
-          <AudioMedia
-            audioUrl={props.lineEcho.line.audioUrl}
-            handleOnPause={handleOnPause}
-            loop={true}
-            controls={true}
-          />
-        ) : (
-          <AudioRecorder handleBlob={handleBlob} />
-        )}
-        {audioUrl ? (
-          <AudioMedia
-            audioUrl={audioUrl}
-            controls={true}
-            mimetype={audioMime}
-          />
-        ) : (
-          ""
-        )}
+const LineMine = withMediaRecorder(
+  ({ initUserMedia, characters, lineEcho }) => {
+    const [donePlaying, setDonePlaying] = useState(false);
+    const [audioUrl, setAudioUrl] = useState(null);
+    const [audioMime, setAudioMime] = useState(null);
+    const handleOnPause = (e) => {
+      setDonePlaying(true);
+      initUserMedia();
+    };
+    const handleBlob = (blobAndType) => {
+      const [blob, type] = blobAndType;
+      const url = window.URL.createObjectURL(blob);
+      setAudioUrl(url);
+      setAudioMime(type);
+    };
+    return (
+      <div
+        className="speech-bubble-outer float-start clearfix"
+        style={{ width: "60%" }}
+      >
+        <div className="speech-bubble-mine ">
+          <p>
+            <strong>
+              {charFromIdx(characters, lineEcho.line.characterIdx)} (You)
+            </strong>
+          </p>
+          <p>
+            {donePlaying && <strong>Say: </strong>}
+            {lineEcho.line.content}
+          </p>
+          {!donePlaying ? (
+            <AudioMedia
+              audioUrl={lineEcho.line.audioUrl}
+              handleOnPause={handleOnPause}
+              loop={true}
+              controls={true}
+            />
+          ) : (
+            <AudioRecorder handleBlob={handleBlob} />
+          )}
+          {audioUrl ? (
+            <AudioMedia
+              audioUrl={audioUrl}
+              controls={true}
+              mimetype={audioMime}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
-const AudioMedia = (props) => {
+const AudioMedia = ({
+  controls,
+  loop,
+  handleOnPlay,
+  handleOnPause,
+  audioUrl,
+  mimetype,
+}) => {
   return (
     <audio
-      controls={props.controls}
-      loop={props.loop}
-      onPlay={props.handleOnPlay}
-      onPause={props.handleOnPause}
+      controls={controls}
+      loop={loop}
+      onPlay={handleOnPlay}
+      onPause={handleOnPause}
     >
-      <source src={props.audioUrl} type={props.mimetype} />
+      <source src={audioUrl} type={mimetype} />
     </audio>
   );
 };
@@ -252,7 +248,6 @@ class AudioRecorderBase extends React.Component {
     this.props.handleBlob([blob, type]);
   }
   render() {
-    console.log(this.props.mediaRecorderState);
     return (
       <div>
         {this.props.mediaRecorderState !== "recording" ? (
