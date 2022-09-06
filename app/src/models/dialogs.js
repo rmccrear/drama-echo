@@ -117,7 +117,6 @@ function createLineOfDialog(dialog, lineParams) {
 }
 function updateLineOfDialog(dialog, lineParams) {
   const axios = getApiFetcher();
-  console.log(lineParams);
   const dialog_id = dialog._id;
   const line_id = lineParams._id;
   return axios

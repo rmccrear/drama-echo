@@ -9,6 +9,17 @@ audio {
     margin-bottom: .5rem;
 }
 
+.line-text {
+    text-align: left;
+}
+
+.line-character-name {
+    font-weight: bold;
+}
+.line-character-name::after {
+    content: ': ';
+}
+
 .line-edit-button {
     float: right;
 }

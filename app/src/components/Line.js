@@ -48,8 +48,9 @@ class Line extends React.Component {
             <Card className="mb-3">
               <Card.Body>
                 <Card.Header>
-                  <p>
-                    {characterName}: {content}
+                  <p className="line-text">
+                    <span className="line-character-name">{characterName}</span>
+                    <span className="line-content">{content}</span>
                   </p>
                 </Card.Header>
                 <div>
@@ -99,6 +100,8 @@ class LineForm extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleUploadedFile = this.handleUploadedFile.bind(this);
     this.state = { line: this.props.line };
+    this.state.loadingDelete = false;
+    this.state.loadingSubmit = false;
   }
   handleChange(e) {
     const fieldName = e.target.name;
@@ -111,12 +114,15 @@ class LineForm extends React.Component {
     const newLine = { ...this.state.line, characterIdx: parseInt(value, 10) };
     this.setState({ ...this.state, line: newLine });
   }
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
+    this.state.loadingSubmit = true;
     const line = new LineObj(this.state.line);
-    this.props.handleUpdateLine(line);
+    await this.props.handleUpdateLine(line);
+    this.state.loadingSubmit = false;
   }
   handleDelete(e) {
+    this.state.loadingDelete = true;
     this.props.handleDeleteLine(this.props.line);
   }
   handleUploadedFile(file) {
@@ -160,8 +166,12 @@ class LineForm extends React.Component {
                 handleUploadedFile={this.handleUploadedFile}
               />
             </div>
-            <Button type="submit" className="line-submit-button">
-              Submit
+            <Button
+              type="submit"
+              className="line-submit-button"
+              disabled={this.state.loadingDelete && this.state.loadingSubmit}
+            >
+              {this.state.loadingSubmit ? "Uploading..." : "Submit"}
             </Button>
             <Button
               className="line-cancel-button"
@@ -174,8 +184,9 @@ class LineForm extends React.Component {
               variant="danger"
               className="line-delete-button"
               onClick={this.handleDelete}
+              disabled={this.state.loadingDelete && this.state.loadingSubmit}
             >
-              Delete
+              {this.state.loadingDelete ? "Deleting" : "Delete"}
             </Button>
           </Form.Group>
         </Form>

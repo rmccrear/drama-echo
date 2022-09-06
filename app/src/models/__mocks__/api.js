@@ -39,17 +39,31 @@ const getApiFetcher = () => {
     },
     put: (url, data) => {
       putCalled(url, data);
-      if (url.match(/^\/dialogs\/\w+/)) {
+      if (url.match(/^\/dialogs\/\w+$/)) {
         const dialog_id = url.match(/^\/dialogs\/(\w+)/)[1];
         const dialog = sampleDb.dialogs.find((d) => d._id === dialog_id);
         return wrapAxiosCall({ ...dialog, ...data });
+      } else if (url.match(/^\/dialogs\/\w+\/lines\/\w+$/)) {
+        const match = url.match(/^\/dialogs\/(\w+)\/lines\/(\w+)$/);
+        const dialog_id = match[1];
+        const line_id = match[2];
+        const dialog = sampleDb.dialogs.find((d) => d._id === dialog_id);
+        return wrapAxiosCall(data);
       }
     },
     delete: (url) => {
       deleteCalled(url);
-      if (url.match(/^\/dialogs\/\w+/)) {
-        const dialog_id = url.match(/^\/dialogs\/(\w+)/)[1];
+      if (url.match(/^\/dialogs\/\w+$/)) {
+        const dialog_id = url.match(/^\/dialogs\/(\w+)$/)[1];
         return wrapAxiosCall({ message: "Deleted Document " + dialog_id });
+      } else if (url.match(/^\/dialogs\/\w+\/lines\/\w+$/)) {
+        const match = url.match(/^\/dialogs\/(\w+)\/lines\/(\w+)$/);
+        const dialog_id = match[1];
+        const line_id = match[2];
+        const dialog = sampleDb.dialogs.find((d) => d._id === dialog_id);
+        const lines = dialog.lines.filter((line) => line._id !== line_id);
+        const newDialog = { ...dialog, lines };
+        return wrapAxiosCall(newDialog);
       }
     },
   };

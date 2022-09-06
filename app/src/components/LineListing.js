@@ -38,20 +38,15 @@ class LineListing extends React.Component {
       const idx = this.state.lines.findIndex((l) => l._id === line_id);
       this.state.lines[idx] = line;
       this.state.lines = Array.from(this.state.lines);
-      console.log({ ...this.state.lines });
       this.setState({ ...this.state });
     } else {
       console.log(result.error);
     }
   }
   async deleteLine(line) {
-    console.log(this.props.dialog, line);
-    console.log(this.state);
     const result = await deleteLineOfDialog(this.props.dialog, line);
     if (!result.error) {
-      console.log(result);
       this.setState({ ...this.state, lines: result.lines });
-      console.log(this.state);
     }
     return result;
   }
