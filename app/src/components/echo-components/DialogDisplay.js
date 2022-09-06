@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
 import withParams from "../../withParams";
 
 import "./Echo.scss";
@@ -12,7 +11,6 @@ class DialogDisplay extends React.Component {
     this.goToEcho = this.goToEcho.bind(this);
   }
   goToEcho() {
-    console.log("go");
     this.props.navigate(`/echo/${this.props.dialog._id}`);
   }
   render() {
@@ -27,9 +25,7 @@ class DialogDisplay extends React.Component {
           <p onClick={this.goToEcho}>
             Character 2: {dialog.characters[1] || "_"}
           </p>
-          <Button as={Link} to={`/echo/${dialog._id}`}>
-            Make an Echo
-          </Button>
+          <Button onClick={this.goToEcho}>Make an Echo</Button>
         </Card.Body>
       </Card>
     );

@@ -187,8 +187,7 @@ class LineForm extends React.Component {
 class CharacterSelect extends React.Component {
   render() {
     const characterIdx = this.props.line.characterIdx;
-    const characters = this.props.characters;
-    const handleSelect = this.props.handleSelect;
+    const { characters, handleSelect } = this.props;
     return (
       <Form.Group>
         <Form.Label>
@@ -196,11 +195,12 @@ class CharacterSelect extends React.Component {
           <Form.Select
             aria-label="Select character for this line of dialog."
             onChange={handleSelect}
+            defaultValue={characterIdx}
           >
             <option>Choose Character</option>
             {this.props.characters.map((c, idx) => {
               return (
-                <option key={idx} value={idx} selected={characterIdx === idx}>
+                <option key={idx} value={idx}>
                   {characterNamefromIdx(idx, characters)}
                 </option>
               );

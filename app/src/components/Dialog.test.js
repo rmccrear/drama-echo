@@ -38,6 +38,7 @@ describe("Dialog CRUD", () => {
     expect(myDialogsElement).toBeInTheDocument();
     expect(getCalled).toHaveBeenCalledWith(testRoute);
   });
+
   test("renders DialogUpdate", async () => {
     const dialog_id = testDialogs[1]._id;
     const testRoute = `/dialogs/${dialog_id}/edit`;
@@ -69,6 +70,7 @@ describe("Dialog CRUD", () => {
     const myDialogsElement = await screen.findByText(/Mock Updated Dialog/);
     expect(myDialogsElement).toBeInTheDocument();
   });
+
   test("deletes Dialog from DialogUpdate", async () => {
     const testRoute = `/dialogs/${testDialogs[1]._id}/edit`;
     render(
@@ -89,6 +91,7 @@ describe("Dialog CRUD", () => {
     const listComponent = await screen.findByText("Mock Dialog List");
     expect(listComponent).toBeInTheDocument();
   });
+
   test("renders DialogCreate", async () => {
     const testRoute = "/dialogs/new";
     let testHistory, testLocation;

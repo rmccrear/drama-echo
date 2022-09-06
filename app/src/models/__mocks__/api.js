@@ -27,6 +27,8 @@ const getApiFetcher = () => {
       } else if (url.match(/^\/dialogs\/\w+/)) {
         const dialog_id = url.match(/^\/dialogs\/(\w+)/)[1];
         return wrapAxiosCall(sampleDb.dialogs.find((d) => d._id === dialog_id));
+      } else if (url.match(/^\/dialog-feed/)) {
+        return wrapAxiosCall(sampleDb.dialogs);
       }
     },
     post: (url, data) => {

@@ -61,9 +61,13 @@ class LineListing extends React.Component {
       <div className="container">
         <TransitionGroup className="line-list">
           {lines.map((line) => (
-            <CSSTransition key={line._id} timeout={500} classNames="line-item">
+            <CSSTransition
+              key={line._id + "-transition-component"}
+              timeout={500}
+              classNames="line-item"
+            >
               <Line
-                key={line._id}
+                key={line._id + "-line-component"}
                 updateLine={this.updateLine}
                 deleteLine={this.deleteLine}
                 line={line}
