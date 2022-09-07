@@ -19,6 +19,7 @@ class DialogDisplay extends React.Component {
       <Card className="dialog-display">
         <Card.Header>
           <h1> {dialog.title} </h1>
+          <MediaDisplay demoMedia={dialog.demoMedia} />
         </Card.Header>
         <Card.Body>
           <p onClick={this.goToEcho}>Character 1: {dialog.characters[0]}</p>
@@ -31,5 +32,24 @@ class DialogDisplay extends React.Component {
     );
   }
 }
+
+const MediaDisplay = (props) => {
+  const { demoMedia } = props;
+  if (demoMedia && demoMedia.mediaType === "video" && demoMedia.url) {
+    return (
+      <video controls={true} className="media-demo-video">
+        <source src={demoMedia.url} />
+      </video>
+    );
+  } else if (demoMedia && demoMedia.mediaType === "audio" && demoMedia.url) {
+    return (
+      <audio controls={true} className="media-demo-audio">
+        <source src={demoMedia.url} />
+      </audio>
+    );
+  } else {
+    return "";
+  }
+};
 
 export default withParams(DialogDisplay);

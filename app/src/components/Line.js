@@ -8,6 +8,9 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import "./Line.scss";
 
+const remoteCloudinaryFolder =
+  process.env.REACT_APP_CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
+
 function characterNamefromIdx(idx, characters) {
   return characters[idx];
 }
@@ -116,14 +119,15 @@ class LineForm extends React.Component {
   }
   async handleSubmit(e) {
     e.preventDefault();
-    this.state.loadingSubmit = true;
     const line = new LineObj(this.state.line);
+    this.setState({ ...this.state, loadingSubmit: true });
     await this.props.handleUpdateLine(line);
-    this.state.loadingSubmit = false;
+    this.setState({ ...this.state, loadingSubmit: false });
   }
-  handleDelete(e) {
-    this.state.loadingDelete = true;
-    this.props.handleDeleteLine(this.props.line);
+  async handleDelete(e) {
+    this.setState({ ...this.state, loadingDelete: true });
+    await this.props.handleDeleteLine(this.props.line);
+    this.setState({ ...this.state, loadingDelete: true });
   }
   handleUploadedFile(file) {
     const newLine = { ...this.state.line, audioUrl: file.secure_url };
@@ -152,6 +156,7 @@ class LineForm extends React.Component {
             />
             <div className="line-form-audio-uploader">
               <Uploader
+                folder={remoteCloudinaryFolder}
                 label={
                   <div>
                     <span>3. Select Audio. </span>

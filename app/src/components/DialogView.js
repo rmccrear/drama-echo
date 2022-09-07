@@ -10,6 +10,23 @@ import LineListing from "./LineListing";
 import withParams from "../withParams";
 import withAuth from "../withAuth";
 
+const DemoMedia = (props) => {
+  const { demoMedia } = props;
+  if (demoMedia.mediaType === "audio") {
+    return (
+      <audio controls={true}>
+        <source src={demoMedia.url} />
+      </audio>
+    );
+  } else if (demoMedia.mediaType === "video") {
+    return (
+      <video controls={true} style={{ width: "100%" }}>
+        <source src={demoMedia.url} />
+      </video>
+    );
+  }
+};
+
 class DialogView extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +62,7 @@ class DialogView extends React.Component {
   }
 
   render() {
+    console.log(this.state.dialog);
     return !this.state.error && !this.state.loading ? (
       <div className="container">
         <Card>
@@ -55,6 +73,9 @@ class DialogView extends React.Component {
                 Character {i + 1}: {character}
               </p>
             ))}
+            {this.state.dialog.demoMedia && (
+              <DemoMedia demoMedia={this.state.dialog.demoMedia} />
+            )}
             <Button
               className="dialog-cancel-button"
               variant="secondary"

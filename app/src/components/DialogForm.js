@@ -2,7 +2,11 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
+import Uploader from "./CloudinaryUploader";
 import "./Dialog.scss";
+
+const uploadFolder =
+  process.env.REACT_APP_CLOUDINARY_REMOTE_DIALOG_DEMOS_FOLDER;
 
 function unpackDialog(dialog) {
   if (dialog)
@@ -24,6 +28,7 @@ class DialogForm extends React.Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUploadedFile = this.handleUploadedFile.bind(this);
     this.state = unpackDialog(this.props.dialog);
   }
   handleChange(e) {
@@ -39,6 +44,19 @@ class DialogForm extends React.Component {
       characters: [role1, role2],
     };
     this.props.handleSubmit(dialogParams);
+  }
+  handleUploadedFile(file) {
+    const url = file.secure_url;
+    const mediaType = file.is_audio ? "audio" : "video";
+    const format = file.format;
+    const { title, role1, role2 } = this.state;
+    const dialogParams = {
+      title,
+      characters: [role1, role2],
+      demoMedia: { url, mediaType, format },
+    };
+    this.props.handleSubmit(dialogParams);
+    this.setState({ ...this.state, demoMedia: { url, mediaType, format } });
   }
   render() {
     return (
@@ -81,6 +99,21 @@ class DialogForm extends React.Component {
             <Form.Text className="text-muted">
               Enter the name of the second character in your dialog.
             </Form.Text>
+          </Form.Group>
+          <Form.Group>
+            <Uploader
+              label={
+                <div>
+                  <span>
+                    Select audio or video file to show dialog overview.
+                    (optional)
+                  </span>
+                </div>
+              }
+              folder={uploadFolder}
+              publicId={this.props.dialog._id}
+              handleUploadedFile={this.handleUploadedFile}
+            />
           </Form.Group>
         </div>
         <div className="clearfix m-2">

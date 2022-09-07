@@ -26,6 +26,7 @@ async function create(req, res) {
       title: d.title,
       characters: d.characters,
       user_sub: sub,
+      demoMedia: d.demoMedia,
     };
     const dialog = await Dialog.create(dialogParams);
     res.send(dialog);
@@ -44,8 +45,8 @@ async function update(req, res) {
       title: d.title,
       characters: d.characters,
       status: d.status,
+      demoMedia: d.demoMedia,
     };
-    console.log(dialogParams);
     const dialog_id = id;
     const dialog = await updateDialog(sub, dialog_id, dialogParams);
     res.send(dialog);

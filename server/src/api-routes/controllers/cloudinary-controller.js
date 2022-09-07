@@ -4,16 +4,19 @@ require("../../cloudinary-config");
 const { Dialog } = require("../../db/models/dialogs");
 const apiSecret = cloudinary.config().api_secret;
 
-const remoteFolder = process.env.CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
+const remoteLinesOfDialogFolder =
+  process.env.CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
+const remoteDialogdemosFolder =
+  process.env.CLOUDINARY_REMOTE_DIALOG_DEMOS_FOLDER;
 
-const signuploadform = (public_id) => {
+const signuploadform = (public_id, folder) => {
   const timestamp = Math.round(new Date().getTime() / 1000);
   const requestedParams = {
     timestamp: timestamp,
     // eager: 'c_pad,h_300,w_400|c_crop,h_200,w_260',
-    folder: remoteFolder,
+    public_id: public_id,
+    folder: folder,
   };
-  if (public_id) requestedParams.public_id = public_id;
   const signature = cloudinary.utils.api_sign_request(
     requestedParams,
     apiSecret
@@ -27,22 +30,20 @@ const apiKey = cloudinary.config().api_key;
 
 // using this API should require authentication
 async function sign(req, res) {
-  /* uploadType = "echodialog_lines | echodialog_echoes | echodialog_demos" */
+  /* uploadType = "echodialog_lines | echodialog_echoes | echodialog_dialogdemos" */
   const { public_id, upload_type } = req.params;
 
   const { sub } = req.auth; // user_id
-  // verify public_id format is dialog_id--line_id
-  if (public_id) {
-    try {
-      const isValid = await validatePublicId(sub, public_id, upload_type);
-      if (!isValid) return res.status(400).send({ error: "Invalid public_id" });
-    } catch (e) {
-      return res.status(400).send({ error: e });
-    }
+
+  try {
+    const isValid = await validatePublicId(sub, public_id, upload_type);
+    if (!isValid) return res.status(400).send({ error: "Invalid public_id" });
+  } catch (e) {
+    return res.status(400).send({ error: e });
   }
 
   try {
-    const sig = signuploadform(public_id);
+    const sig = signuploadform(public_id, upload_type);
     const resObj = {
       signature: sig.signature,
       timestamp: sig.timestamp,
@@ -78,15 +79,28 @@ async function validatePublicId(user_sub, public_id, upload_type) {
       }
     }
     return false;
+  } else if (upload_type === "echodialog_dialogdemos") {
+    const dialog_id = public_id;
+    if (mongoose.Types.ObjectId.isValid(dialog_id)) {
+      dialog = await Dialog.findOne({ user_sub, _id: dialog_id });
+      if (dialog) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 function mediaPublicIdGen(dialog_id, line_id) {
   return `${dialog_id}--${line_id}`;
 }
 
+// delete media for line
 function deleteMedia(dialog_id, line_id) {
-  const public_id = `${remoteFolder}/${mediaPublicIdGen(dialog_id, line_id)}`;
+  const public_id = `${remoteLinesOfDialogFolder}/${mediaPublicIdGen(
+    dialog_id,
+    line_id
+  )}`;
   return cloudinary.uploader
     .destroy(public_id, {
       resource_type: "video",
@@ -98,4 +112,8 @@ function deleteMedia(dialog_id, line_id) {
     });
 }
 
-module.exports = { sign, deleteMedia };
+module.exports = {
+  sign, // exported
+  deleteMedia, // exported
+  validatePublicId, // for tests
+};

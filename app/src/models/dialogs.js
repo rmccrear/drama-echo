@@ -91,6 +91,7 @@ class Dialog {
     this._id = d._id;
     this.user_sub = d.user_sub;
     this.status = d.status;
+    this.demoMedia = d.demoMedia;
   }
 }
 

@@ -6,12 +6,19 @@ const lineSchema = new mongoose.Schema({
   audioUrl: String,
 });
 
+const mediaSchema = new mongoose.Schema({
+  url: String,
+  mediaType: String, // audio | video
+  format: String, // mov | mp3  | ...etc
+});
+
 const dialogSchema = new mongoose.Schema({
   title: String,
   characters: [String],
   user_sub: { type: String, index: true },
   lines: [lineSchema],
   status: String,
+  demoMedia: mediaSchema,
 });
 
 const Dialog = mongoose.model("Dialog", dialogSchema);

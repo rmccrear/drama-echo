@@ -1,12 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 
 // import cloudinary from "cloudinary-core";
 import withAuth from "../withAuth";
 import { getApiFetcher } from "../models/api";
-
-const remoteCloudinaryFolder =
-  process.env.REACT_APP_CLOUDINARY_REMOTE_LINES_OF_DIALOG_FOLDER;
 
 /*
 const cl = new cloudinary.Cloudinary({
@@ -33,7 +31,7 @@ function getUploadSig(public_name, upload_type) {
 }
 
 // uploadType = "echodialog_lines | echodialog_echoes | echodialog_demos"
-function uploadFile(file, signData, publicId) {
+function uploadFile(file, signData, publicId, folder) {
   const formData = new FormData();
   const url =
     "https://api.cloudinary.com/v1_1/" + signData.cloudname + "/auto/upload";
@@ -42,7 +40,7 @@ function uploadFile(file, signData, publicId) {
   formData.append("timestamp", signData.timestamp);
   formData.append("signature", signData.signature);
   //formData.append("eager", "c_pad,h_300,w_400|c_crop,h_200,w_260");
-  formData.append("folder", remoteCloudinaryFolder);
+  formData.append("folder", folder);
   if (publicId) formData.append("public_id", publicId);
   return fetch(url, {
     method: "POST",
@@ -60,17 +58,19 @@ function uploadFile(file, signData, publicId) {
     });
 }
 
+// props:
 class CloudinaryUploader extends React.Component {
   constructor(props) {
     super(props);
-    //this.sign();
     this.sign = this.sign.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   async sign() {
     await this.props.setupAccessToken();
     const publicId = this.props.publicId;
-    const sig = await getUploadSig(publicId, "echodialog_lines");
+    const folder = this.props.folder;
+    console.log(publicId, folder);
+    const sig = await getUploadSig(publicId, folder);
     return sig;
   }
   async handleChange(e) {
@@ -83,7 +83,7 @@ class CloudinaryUploader extends React.Component {
         file,
         sig,
         publicId,
-        "echodialog_lines"
+        this.props.folder
       );
       console.log(uploadedFile);
       this.props.handleUploadedFile(uploadedFile);
@@ -104,6 +104,14 @@ class CloudinaryUploader extends React.Component {
     );
   }
 }
+
+CloudinaryUploader.propTypes = {
+  publicId: PropTypes.string,
+  folder: PropTypes.string,
+  handleUploadedFile: PropTypes.func,
+  setupAccessToken: PropTypes.func,
+  label: PropTypes.node,
+};
 
 function publicNameGen(dialog, line) {
   return `${dialog._id}--${line._id}`;
