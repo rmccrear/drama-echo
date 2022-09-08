@@ -64,6 +64,7 @@ class CloudinaryUploader extends React.Component {
     super(props);
     this.sign = this.sign.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.state = { uploading: false };
   }
   async sign() {
     await this.props.setupAccessToken();
@@ -79,6 +80,8 @@ class CloudinaryUploader extends React.Component {
     const publicId = this.props.publicId;
     if (e.target.files.length === 1) {
       const file = e.target.files[0];
+      this.setState({ ...this.state, uploading: true });
+      this.props.handleUploadStart();
       const uploadedFile = await uploadFile(
         file,
         sig,
@@ -87,6 +90,7 @@ class CloudinaryUploader extends React.Component {
       );
       console.log(uploadedFile);
       this.props.handleUploadedFile(uploadedFile);
+      this.setState({ ...this.state, uploading: false });
     }
   }
   render() {
@@ -94,11 +98,15 @@ class CloudinaryUploader extends React.Component {
       <div>
         <Form.Group>
           <Form.Label> {this.props.label} </Form.Label>
-          <Form.Control
-            onChange={this.handleChange}
-            type="file"
-            accept="audio/*,video/*"
-          ></Form.Control>
+          {this.state.uploading ? (
+            <div> "Uploading file..." </div>
+          ) : (
+            <Form.Control
+              onChange={this.handleChange}
+              type="file"
+              accept="audio/*,video/*"
+            ></Form.Control>
+          )}
         </Form.Group>
       </div>
     );
@@ -109,6 +117,7 @@ CloudinaryUploader.propTypes = {
   publicId: PropTypes.string,
   folder: PropTypes.string,
   handleUploadedFile: PropTypes.func,
+  handleUploadStart: PropTypes.func,
   setupAccessToken: PropTypes.func,
   label: PropTypes.node,
 };

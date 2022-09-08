@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 // import { Link } from "react-router-dom";
@@ -11,6 +12,7 @@ import {
 import withAuth from "../../withAuth";
 import withParams from "../../withParams";
 import withMediaRecorder from "../../withMediaRecorder";
+import MediaDisplay from "../MediaDisplay";
 import "./Echo.scss";
 import "./EchoDialog.scss";
 
@@ -78,6 +80,7 @@ class EchoDialog extends React.Component {
           title={this.state.practice.dialog.title}
           characters={this.state.practice.dialog.characters}
           handleCharacterSelect={this.handleCharacterSelect}
+          demoMedia={this.state.practice.dialog.demoMedia}
         />
       </>
     ) : (
@@ -117,6 +120,9 @@ class EchoDialog extends React.Component {
     );
   }
 }
+EchoDialog.propTypes = {
+  params: PropTypes.object,
+};
 
 class LineEchoListingDisplay extends React.Component {
   render() {
@@ -136,6 +142,11 @@ class LineEchoListingDisplay extends React.Component {
     );
   }
 }
+LineEchoListingDisplay.propTypes = {
+  lineEchoes: PropTypes.array,
+  characterIdx: PropTypes.number,
+  characters: PropTypes.array,
+};
 
 const LineEcho = (props) => {
   if (props.myCharIdx === props.lineEcho.line.characterIdx) {
@@ -284,25 +295,28 @@ class AudioRecorderBase extends React.Component {
 const AudioRecorder = withMediaRecorder(AudioRecorderBase);
 
 const ChooseCharacter = (props) => {
+  const { title, characters, handleCharacterSelect, demoMedia } = props;
+  console.log(demoMedia);
   return (
     <Card style={{ width: "18rem" }} className="mx-auto">
-      <h1>{props.title}</h1>
+      <h1>{title}</h1>
+      <MediaDisplay demoMedia={demoMedia} />
       <h2> Choose your role. </h2>
       <Card.Body>
         <Button
-          style={{ float: "left" }}
+          style={{ float: "left", margin: "3px" }}
           className="clearfix"
           onClick={() => props.handleCharacterSelect(0)}
         >
-          Choose {props.characters[0]}
+          Choose {characters[0]}
         </Button>
-        {props.characters.length > 1 && (
+        {characters.length > 1 && (
           <Button
-            style={{ float: "right" }}
+            style={{ float: "right", margin: "3px" }}
             className="clearfix"
-            onClick={() => props.handleCharacterSelect(1)}
+            onClick={() => handleCharacterSelect(1)}
           >
-            Choose {props.characters[1]}
+            Choose {characters[1]}
           </Button>
         )}
       </Card.Body>

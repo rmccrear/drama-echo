@@ -29,7 +29,9 @@ class DialogForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUploadedFile = this.handleUploadedFile.bind(this);
+    this.handleUploadStart = this.handleUploadStart.bind(this);
     this.state = unpackDialog(this.props.dialog);
+    this.state.uploading = false;
   }
   handleChange(e) {
     const fieldName = e.target.name;
@@ -56,7 +58,15 @@ class DialogForm extends React.Component {
       demoMedia: { url, mediaType, format },
     };
     this.props.handleSubmit(dialogParams);
-    this.setState({ ...this.state, demoMedia: { url, mediaType, format } });
+    this.setState({
+      ...this.state,
+      demoMedia: { url, mediaType, format },
+      uploading: false,
+    });
+  }
+  handleUploadStart() {
+    console.log("handling upload");
+    this.setState({ ...this.state, uploading: true });
   }
   render() {
     return (
@@ -113,11 +123,16 @@ class DialogForm extends React.Component {
               folder={uploadFolder}
               publicId={this.props.dialog._id}
               handleUploadedFile={this.handleUploadedFile}
+              handleUploadStart={this.handleUploadStart}
             />
           </Form.Group>
         </div>
         <div className="clearfix m-2">
-          <Button className="dialog-edit-submit-button" type="submit">
+          <Button
+            className="dialog-edit-submit-button"
+            type="submit"
+            disabled={this.state.uploading}
+          >
             Submit
           </Button>
           {this.props.cancelEdit && (
@@ -125,6 +140,7 @@ class DialogForm extends React.Component {
               className="dialog-edit-cancel-button"
               variant="secondary"
               onClick={this.props.cancelEdit}
+              disabled={this.state.uploading}
             >
               Cancel
             </Button>
@@ -134,6 +150,7 @@ class DialogForm extends React.Component {
               className="dialog-edit-delete-button"
               variant="danger"
               onClick={this.props.deleteFn}
+              disabled={this.state.uploading}
             >
               Delete
             </Button>

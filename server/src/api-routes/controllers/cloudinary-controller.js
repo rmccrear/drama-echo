@@ -85,6 +85,8 @@ async function validatePublicId(user_sub, public_id, upload_type) {
       dialog = await Dialog.findOne({ user_sub, _id: dialog_id });
       if (dialog) {
         return true;
+      } else {
+        console.log("Error in signing echodialog_dialogdemos: ", dialog_id);
       }
     }
   }

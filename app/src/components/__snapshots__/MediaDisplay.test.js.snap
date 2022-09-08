@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders MediaDisplay with audio 1`] = `
+<audio
+  className="media-demo-audio"
+  controls={true}
+>
+  <source
+    src="https://example.com/1234/abcd.aac"
+  />
+  <source
+    src="https://example.com/1234/abcd.mp3"
+  />
+  <source
+    src="https://example.com/1234/abcd.aac"
+  />
+  <source
+    src="https://example.com/1234/abcd.webm"
+  />
+</audio>
+`;
+
+exports[`renders MediaDisplay with video 1`] = `
+<video
+  className="media-demo-video"
+  controls={true}
+>
+  <source
+    src="https://example.com/1234/abcd.mov"
+  />
+  <source
+    src="https://example.com/1234/abcd.mp4"
+  />
+  <source
+    src="https://example.com/1234/abcd.webm"
+  />
+</video>
+`;
