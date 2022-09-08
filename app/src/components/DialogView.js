@@ -12,6 +12,7 @@ import withAuth from "../withAuth";
 
 const DemoMedia = (props) => {
   const { demoMedia } = props;
+  console.log(demoMedia.url);
   if (demoMedia.mediaType === "audio") {
     return (
       <audio controls={true}>
@@ -23,6 +24,23 @@ const DemoMedia = (props) => {
       <video controls={true} style={{ width: "100%" }}>
         <source src={demoMedia.url} />
       </video>
+    );
+  } else if (
+    demoMedia.mediaType === "youtube" &&
+    demoMedia.url.match(
+      /^https:\/\/www\.youtube\.com\/embed\/\w+\?start=[0-9]+$/
+    )
+  ) {
+    return (
+      <iframe
+        width="560"
+        height="315"
+        src={demoMedia.url}
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullscreen
+      ></iframe>
     );
   }
 };

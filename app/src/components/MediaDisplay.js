@@ -2,10 +2,10 @@ const MediaDisplay = (props) => {
   const { demoMedia } = props;
   let sources = <source src={demoMedia?.url} />;
   if (demoMedia && demoMedia.url) {
-    const match = demoMedia.url.match(/(.+)\.(\w+)$/);
-    const url1 = match[1];
-    // const ext = match[2];
     if (demoMedia.mediaType === "video") {
+      const match = demoMedia.url.match(/(.+)\.(\w+)$/);
+      const url1 = match[1];
+      // const ext = match[2];
       sources = (
         <>
           <source src={demoMedia.url} />
@@ -14,6 +14,9 @@ const MediaDisplay = (props) => {
         </>
       );
     } else if (demoMedia.mediaType === "audio") {
+      const match = demoMedia.url.match(/(.+)\.(\w+)$/);
+      const url1 = match[1];
+      // const ext = match[2];
       sources = (
         <>
           <source src={demoMedia.url} />
@@ -21,6 +24,22 @@ const MediaDisplay = (props) => {
           <source src={`${url1}.aac`} />
           <source src={`${url1}.webm`} />
         </>
+      );
+    } else if (
+      demoMedia.mediaType === "youtube" &&
+      demoMedia.url.match(
+        /^https:\/\/www\.youtube\.com\/embed\/\w+\?start=[0-9]+$/
+      )
+    ) {
+      return (
+        <iframe
+          width="100%"
+          src={demoMedia.url}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullscreen
+        ></iframe>
       );
     }
   }

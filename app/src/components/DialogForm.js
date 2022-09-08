@@ -23,6 +23,26 @@ function unpackDialog(dialog) {
     };
 }
 
+const findYoutubeCode = (url) => {
+  // https://www.youtube.com/embed/AnudaIjvumY?start=550
+  const matchForBrowserUrl = url.match(/youtube\.com\/.+v=(\w+)/);
+  const matchForShareLink = url.match(/youtu\.be\/(\w+)/);
+  if (matchForBrowserUrl) {
+    return matchForBrowserUrl[1];
+  } else if (matchForShareLink) {
+    return matchForShareLink[1];
+  }
+};
+
+const embededYoutubeUrl = (url) => {
+  const code = findYoutubeCode(url);
+  if (code) {
+    const url = `https://www.youtube.com/embed/${code}?start=0`;
+    return url;
+  }
+  return undefined;
+};
+
 class DialogForm extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +65,14 @@ class DialogForm extends React.Component {
       title,
       characters: [role1, role2],
     };
+    const youtubeUrl = embededYoutubeUrl(this.state.youtubeUrl);
+    if (youtubeUrl) {
+      dialogParams.demoMedia = {
+        url: youtubeUrl,
+        mediaType: "youtube",
+        format: "link",
+      };
+    }
     this.props.handleSubmit(dialogParams);
   }
   handleUploadedFile(file) {
@@ -124,6 +152,14 @@ class DialogForm extends React.Component {
               publicId={this.props.dialog._id}
               handleUploadedFile={this.handleUploadedFile}
               handleUploadStart={this.handleUploadStart}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Or video link from YouTube: </Form.Label>
+            <Form.Control
+              name="youtubeUrl"
+              placeholder="https://youtube.com/..."
+              onChange={this.handleChange}
             />
           </Form.Group>
         </div>
