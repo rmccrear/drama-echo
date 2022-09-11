@@ -2,6 +2,7 @@ import React from "react";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
+import Loading from "./components/Loading";
 
 const withProtect = (Component) => {
   return (props) => {
@@ -12,7 +13,7 @@ const withProtect = (Component) => {
         appState: { returnTo: location },
       });
     }
-    return isAuthenticated ? <Component {...props} /> : "Loading";
+    return isAuthenticated ? <Component {...props} /> : <Loading />;
   };
 };
 

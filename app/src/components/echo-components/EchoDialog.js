@@ -15,6 +15,7 @@ import withMediaRecorder from "../../withMediaRecorder";
 import MediaDisplay from "../MediaDisplay";
 import "./Echo.scss";
 import "./EchoDialog.scss";
+import Loading from "../Loading";
 
 class EchoDialog extends React.Component {
   constructor(props) {
@@ -73,7 +74,7 @@ class EchoDialog extends React.Component {
   }
   render() {
     return this.state.loading ? (
-      "loading..."
+      <Loading />
     ) : this.state.practice.characterIdx === -1 ? (
       <>
         <ChooseCharacter

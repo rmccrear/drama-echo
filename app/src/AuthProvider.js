@@ -1,9 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
+
+import Loading from "./components/Loading";
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
   const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
   const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
@@ -11,6 +14,7 @@ const AuthProvider = ({ children }) => {
   const onRedirectCallback = (appState) => {
     navigate(appState?.returnTo || window.location.pathname);
   };
+  const isLoadingAppDate = searchParams.get("code") ? true : false;
 
   return (
     <Auth0Provider
@@ -20,7 +24,7 @@ const AuthProvider = ({ children }) => {
       onRedirectCallback={onRedirectCallback}
       audience={audience}
     >
-      {children}
+      {isLoadingAppDate ? <Loading /> : children}
     </Auth0Provider>
   );
 };

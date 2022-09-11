@@ -4,6 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import { setupEchoDialogAuth } from "./models/api";
 
+import Loading from "./components/Loading";
 /*
 const withAuthDev = (Component) => {
   return (props) => {
@@ -77,7 +78,7 @@ const withAuth = (Component) => {
 
     const myUser = user ? { ...user, _id: user.sub } : {};
     return isLoading ? (
-      ""
+      <Loading />
     ) : (
       <Component
         {...props}
