@@ -13,7 +13,7 @@ var jwtCheck = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: jwksUri,
   }),
-  audience: audience,
+  // audience: audience,
   issuer: issuer,
   algorithms: ["RS256"],
 });
