@@ -125,6 +125,9 @@ CloudinaryUploader.propTypes = {
 function publicNameGen(dialog, line) {
   return `${dialog._id}--${line._id}`;
 }
-export { publicNameGen };
+function publicIdForPracticeEcho(practice, echo) {
+  return `${practice._id}--${echo._id}`;
+}
+export { publicNameGen, publicIdForPracticeEcho, getUploadSig, uploadFile };
 
 export default withAuth(CloudinaryUploader);

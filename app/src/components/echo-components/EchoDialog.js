@@ -8,6 +8,7 @@ import { BsFillRecord2Fill, BsStopCircle } from "react-icons/bs";
 import {
   getPracticeFromDialogId,
   setCharacterIdxForPratice,
+  updateEcho,
 } from "../../models/echoes";
 import withAuth from "../../withAuth";
 import withParams from "../../withParams";
@@ -16,12 +17,25 @@ import MediaDisplay from "../MediaDisplay";
 import "./Echo.scss";
 import "./EchoDialog.scss";
 import Loading from "../Loading";
+import {
+  publicIdForPracticeEcho,
+  getUploadSig,
+  uploadFile,
+} from "../CloudinaryUploader";
+
+async function uploadPracticeEcho(practice, echo, blob) {
+  const folder = "echodialog_echoes";
+  const publicId = publicIdForPracticeEcho(practice, echo);
+  const signData = await getUploadSig(publicId, folder);
+  const resp = await uploadFile(blob, signData, publicId, folder);
+  return resp;
+}
 
 class EchoDialog extends React.Component {
   constructor(props) {
     super(props);
     this.handleCharacterSelect = this.handleCharacterSelect.bind(this);
-    this.handleCharacterSelect = this.handleCharacterSelect.bind(this);
+    this.handleRecording = this.handleRecording.bind(this);
     this.state = {
       practice: {},
       loading: true,
@@ -69,6 +83,17 @@ class EchoDialog extends React.Component {
       practice,
     });
   }
+  async handleRecording(echo, blob) {
+    const resp = await uploadPracticeEcho(this.state.practice, echo, blob);
+    // TODO: upload url
+    // echo.echoAudioUrl = resp.secure_url;
+    const resp2 = await updateEcho(this.state.practice._id, {
+      _id: echo._id,
+      echoAudioUrl: resp.secure_url,
+    });
+    console.log(resp);
+    console.log(resp2);
+  }
   myEchoes(echoes, lines) {
     return echoes.map((echo, idx) => ({ echo: echo, line: lines[idx] }));
   }
@@ -105,6 +130,7 @@ class EchoDialog extends React.Component {
           lineEchoes={this.state.lineEchoes}
           characterIdx={this.state.practice.characterIdx}
           characters={this.state.practice.dialog.characters}
+          onRecordingDone={this.handleRecording}
         />
         <div className="done-button-container clearfix">
           <Card>
@@ -137,6 +163,7 @@ class LineEchoListingDisplay extends React.Component {
             lineEcho={lineEcho}
             myCharIdx={this.props.characterIdx}
             characters={this.props.characters}
+            onRecordingDone={this.props.onRecordingDone}
           />
         ))}
       </>
@@ -177,19 +204,25 @@ const charFromIdx = (characters, idx) => characters[idx];
 // record button appears, but before the use clicks on the record button. This is
 // to avoid the permission popup interfering with the actual recording.
 const LineMine = withMediaRecorder(
-  ({ initUserMedia, characters, lineEcho }) => {
+  ({ initUserMedia, characters, lineEcho, onRecordingDone }) => {
+    console.log(lineEcho);
+    const myEchoAudioUrl = lineEcho?.echo?.echoAudioUrl;
     const [donePlaying, setDonePlaying] = useState(false);
-    const [audioUrl, setAudioUrl] = useState(null);
+    const [audioUrl, setAudioUrl] = useState(myEchoAudioUrl);
     const [audioMime, setAudioMime] = useState(null);
+    const [echoMediaKey, setEchoMediaKey] = useState(lineEcho.echo._id);
     const handleOnPause = (e) => {
       setDonePlaying(true);
       initUserMedia();
     };
-    const handleBlob = (blobAndType) => {
+    const handleBlob = async (blobAndType) => {
       const [blob, type] = blobAndType;
       const url = window.URL.createObjectURL(blob);
       setAudioUrl(url);
       setAudioMime(type);
+      setEchoMediaKey(url); // rerender audio tag, since audio tags dont update on src changes.
+      console.log(lineEcho, blob);
+      onRecordingDone(lineEcho.echo, blob);
     };
     return (
       <div
@@ -221,6 +254,7 @@ const LineMine = withMediaRecorder(
               audioUrl={audioUrl}
               controls={true}
               mimetype={audioMime}
+              key={echoMediaKey}
             />
           ) : (
             ""
@@ -238,6 +272,7 @@ const AudioMedia = ({
   handleOnPause,
   audioUrl,
   mimetype,
+  key,
 }) => {
   return (
     <audio
@@ -245,6 +280,7 @@ const AudioMedia = ({
       loop={loop}
       onPlay={handleOnPlay}
       onPause={handleOnPause}
+      key={key}
     >
       <source src={audioUrl} type={mimetype} />
     </audio>

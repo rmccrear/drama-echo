@@ -33,6 +33,15 @@ async function setCharacterIdxForPratice(characterIdx, practice_id) {
     });
 }
 
+async function updateEcho(practice_id, echo) {
+  const axios = getApiFetcher();
+  return axios
+    .put(`/practice/${practice_id}/${echo._id}`, echo)
+    .then((resp) => {
+      return resp.data;
+    });
+}
+
 const genLinkToEcho = (dialog_id) => {
   const { protocol, host } = window.location;
   return `${protocol}//${host}/echo/${dialog_id}`;
@@ -42,5 +51,6 @@ export {
   getDialogFeed,
   getPracticeFromDialogId,
   setCharacterIdxForPratice,
+  updateEcho,
   genLinkToEcho,
 };

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 require("../../cloudinary-config");
 const { Dialog } = require("../../db/models/dialogs");
+const { Practice } = require("../../db/models/practices");
 const apiSecret = cloudinary.config().api_secret;
 
 const remoteLinesOfDialogFolder =
@@ -34,7 +35,6 @@ async function sign(req, res) {
   const { public_id, upload_type } = req.params;
 
   const { sub } = req.auth; // user_id
-
   try {
     const isValid = await validatePublicId(sub, public_id, upload_type);
     if (!isValid) return res.status(400).send({ error: "Invalid public_id" });
@@ -87,6 +87,25 @@ async function validatePublicId(user_sub, public_id, upload_type) {
         return true;
       } else {
         console.log("Error in signing echodialog_dialogdemos: ", dialog_id);
+      }
+    }
+  } else if (upload_type === "echodialog_echoes") {
+    const sections = public_id.split("--");
+    [practice_id, echo_id] = sections;
+    if (
+      mongoose.Types.ObjectId.isValid(practice_id) &&
+      mongoose.Types.ObjectId.isValid(echo_id) &&
+      sections.length === 2
+    ) {
+      practice = await Practice.findOne({ user_sub, _id: practice_id });
+      if (practice) {
+        return true;
+      } else {
+        console.log(
+          "Error in signing echodialog_echoes: ",
+          practice_id,
+          echo_id
+        );
       }
     }
   }
