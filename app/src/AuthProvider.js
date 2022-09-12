@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
   const [searchParams] = useSearchParams();
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
   const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
-  const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+  // const audience = process.env.REACT_APP_AUTH0_AUDIENCE; // No need for audience without API AUTH
 
   const onRedirectCallback = (appState) => {
     navigate(appState?.returnTo || window.location.pathname);
@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
-      audience={audience}
+      // audience={audience}
     >
       {isLoadingAppDate ? <Loading /> : children}
     </Auth0Provider>
