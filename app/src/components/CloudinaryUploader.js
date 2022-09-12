@@ -50,7 +50,6 @@ function uploadFile(file, signData, publicId, folder) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((e) => {

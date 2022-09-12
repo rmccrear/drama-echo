@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 // import { Link } from "react-router-dom";
-import { BsFillRecord2Fill, BsStopCircle } from "react-icons/bs";
+import {
+  BsFillRecord2Fill,
+  BsStopCircle,
+  BsCheckLg,
+  BsArrowCounterclockwise,
+} from "react-icons/bs";
 
 import {
   getPracticeFromDialogId,
@@ -84,15 +89,13 @@ class EchoDialog extends React.Component {
     });
   }
   async handleRecording(echo, blob) {
+    // upload audio file
     const resp = await uploadPracticeEcho(this.state.practice, echo, blob);
-    // TODO: upload url
-    // echo.echoAudioUrl = resp.secure_url;
-    const resp2 = await updateEcho(this.state.practice._id, {
+    // update echo to remember audio file
+    await updateEcho(this.state.practice._id, {
       _id: echo._id,
       echoAudioUrl: resp.secure_url,
     });
-    console.log(resp);
-    console.log(resp2);
   }
   myEchoes(echoes, lines) {
     return echoes.map((echo, idx) => ({ echo: echo, line: lines[idx] }));
@@ -205,12 +208,13 @@ const charFromIdx = (characters, idx) => characters[idx];
 // to avoid the permission popup interfering with the actual recording.
 const LineMine = withMediaRecorder(
   ({ initUserMedia, characters, lineEcho, onRecordingDone }) => {
-    console.log(lineEcho);
     const myEchoAudioUrl = lineEcho?.echo?.echoAudioUrl;
     const [donePlaying, setDonePlaying] = useState(false);
     const [audioUrl, setAudioUrl] = useState(myEchoAudioUrl);
     const [audioMime, setAudioMime] = useState(null);
     const [echoMediaKey, setEchoMediaKey] = useState(lineEcho.echo._id);
+    const [itsOk, setItsOk] = useState(false);
+    const [redo, setRedo] = useState(false);
     const handleOnPause = (e) => {
       setDonePlaying(true);
       initUserMedia();
@@ -221,8 +225,17 @@ const LineMine = withMediaRecorder(
       setAudioUrl(url);
       setAudioMime(type);
       setEchoMediaKey(url); // rerender audio tag, since audio tags dont update on src changes.
-      console.log(lineEcho, blob);
+      setRedo(false);
       onRecordingDone(lineEcho.echo, blob);
+    };
+    const handleTryAgain = () => {
+      setDonePlaying(false);
+      setAudioUrl(null);
+      setRedo(true);
+    };
+    const handleOk = () => {
+      setItsOk(true);
+      setRedo(false);
     };
     return (
       <div
@@ -230,6 +243,18 @@ const LineMine = withMediaRecorder(
         style={{ width: "60%" }}
       >
         <div className="speech-bubble-mine ">
+          {itsOk ? (
+            <BsCheckLg style={{ float: "right", margin: ".25em" }} />
+          ) : (
+            ""
+          )}
+          {redo ? (
+            <BsArrowCounterclockwise
+              style={{ float: "right", margin: ".25em" }}
+            />
+          ) : (
+            ""
+          )}
           <p>
             <strong>
               {charFromIdx(characters, lineEcho.line.characterIdx)} (You)
@@ -239,23 +264,64 @@ const LineMine = withMediaRecorder(
             {donePlaying && <strong>Say: </strong>}
             {lineEcho.line.content}
           </p>
-          {!donePlaying ? (
+          {!audioUrl && !donePlaying ? (
             <AudioMedia
               audioUrl={lineEcho.line.audioUrl}
               handleOnPause={handleOnPause}
               loop={true}
               controls={true}
             />
-          ) : (
+          ) : !audioUrl ? (
             <AudioRecorder handleBlob={handleBlob} />
+          ) : (
+            ""
           )}
           {audioUrl ? (
-            <AudioMedia
-              audioUrl={audioUrl}
-              controls={true}
-              mimetype={audioMime}
-              key={echoMediaKey}
-            />
+            <div>
+              <AudioMedia
+                audioUrl={audioUrl}
+                controls={true}
+                mimetype={audioMime}
+                audioTagKey={echoMediaKey}
+              />
+              {!itsOk ? (
+                <div>
+                  <Button
+                    variant="danger"
+                    className="float-left"
+                    style={{
+                      float: "left",
+                      margin: ".25em",
+                      marginLeft: "1em",
+                      marginTop: "1em",
+                    }}
+                    onClick={handleTryAgain}
+                  >
+                    <span>&#10005; &nbsp; Try Again </span>
+                  </Button>
+                  <Button
+                    variant="primary"
+                    className="float-right"
+                    style={{
+                      float: "right",
+                      margin: ".25em",
+                      marginRight: "1em",
+                      marginTop: "1em",
+                    }}
+                    onClick={handleOk}
+                  >
+                    <span>
+                      <BsCheckLg /> &nbsp; OK{" "}
+                    </span>
+                  </Button>
+                  <div className="clear-fix" style={{ clear: "both" }}>
+                    <br />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
           ) : (
             ""
           )}
@@ -272,19 +338,33 @@ const AudioMedia = ({
   handleOnPause,
   audioUrl,
   mimetype,
-  key,
+  audioTagKey,
 }) => {
-  return (
-    <audio
-      controls={controls}
-      loop={loop}
-      onPlay={handleOnPlay}
-      onPause={handleOnPause}
-      key={key}
-    >
-      <source src={audioUrl} type={mimetype} />
-    </audio>
-  );
+  if (audioUrl) {
+    const match = audioUrl.match(/(.+)\.(\w+)$/);
+    let url1 = null;
+    if (match) url1 = match[1]; // if blob, there will be no match.
+    return (
+      <audio
+        controls={controls}
+        loop={loop}
+        onPlay={handleOnPlay}
+        onPause={handleOnPause}
+        key={audioTagKey}
+      >
+        <source src={audioUrl} type={mimetype} />
+        {match ? (
+          <>
+            <source src={`${url1}.mp3`} />
+            <source src={`${url1}.aac`} />
+            <source src={`${url1}.webm`} />
+          </>
+        ) : (
+          ""
+        )}
+      </audio>
+    );
+  } else return "";
 };
 class AudioRecorderBase extends React.Component {
   constructor(props) {
