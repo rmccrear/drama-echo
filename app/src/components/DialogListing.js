@@ -29,7 +29,7 @@ class DialogListing extends React.Component {
   }
   async componentDidMount() {
     await this.props.setupAccessToken();
-    const dialogs = await fetchDialogsForUser(this.props.user._id);
+    const dialogs = await fetchDialogsForUser();
     this.setState({ ...this.state, dialogs });
   }
   render() {
