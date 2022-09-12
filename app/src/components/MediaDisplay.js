@@ -1,11 +1,13 @@
 const MediaDisplay = (props) => {
   const { demoMedia } = props;
   let sources = <source src={demoMedia?.url} />;
+  let poster = "";
   if (demoMedia && demoMedia.url) {
     if (demoMedia.mediaType === "video") {
       const match = demoMedia.url.match(/(.+)\.(\w+)$/);
       const url1 = match[1];
       // const ext = match[2];
+      poster = `${url1}.jpeg`;
       sources = (
         <>
           <source src={demoMedia.url} />
@@ -45,7 +47,7 @@ const MediaDisplay = (props) => {
   }
   if (demoMedia && demoMedia.mediaType === "video" && demoMedia.url) {
     return (
-      <video controls={true} className="media-demo-video">
+      <video controls={true} className="media-demo-video" poster={poster}>
         {sources}
       </video>
     );
