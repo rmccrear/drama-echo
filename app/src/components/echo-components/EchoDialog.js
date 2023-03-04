@@ -12,7 +12,7 @@ import {
 
 import {
   getPracticeFromDialogId,
-  setCharacterIdxForPractice,
+  setCharacterIdxForPratice,
   updateEcho,
 } from "../../models/echoes";
 import withAuth from "../../withAuth";
@@ -79,7 +79,7 @@ class EchoDialog extends React.Component {
   }
   async handleCharacterSelect(characterIdx) {
     this.setState({ ...this.state, loading: true });
-    await setCharacterIdxForPractice(characterIdx, this.state.practice._id);
+    await setCharacterIdxForPratice(characterIdx, this.state.practice._id);
     //this.state.practice.characterIdx = characterIdx;
     const practice = { ...this.state.practice, characterIdx };
     this.setState({

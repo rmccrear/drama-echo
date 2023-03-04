@@ -24,7 +24,7 @@ async function getPracticeFromDialogId(dialog_id) {
     });
 }
 
-async function setCharacterIdxForPractice(characterIdx, practice_id) {
+async function setCharacterIdxForPratice(characterIdx, practice_id) {
   const axios = getApiFetcher();
   return axios
     .put(`/practice/${practice_id}`, { characterIdx })
@@ -50,7 +50,7 @@ const genLinkToEcho = (dialog_id) => {
 export {
   getDialogFeed,
   getPracticeFromDialogId,
-  setCharacterIdxForPractice,
+  setCharacterIdxForPratice,
   updateEcho,
   genLinkToEcho,
 };
