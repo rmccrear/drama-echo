@@ -102,6 +102,7 @@ class LineForm extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleUploadedFile = this.handleUploadedFile.bind(this);
+    this.handleUploadStart = this.handleUploadStart.bind(this);
     this.state = { line: this.props.line };
     this.state.loadingDelete = false;
     this.state.loadingSubmit = false;
@@ -133,6 +134,10 @@ class LineForm extends React.Component {
     const newLine = { ...this.state.line, audioUrl: file.secure_url };
     this.props.handleUpdateLine(newLine);
     this.setState({ ...this.state, line: newLine });
+  }
+  // TODO: use loadingSubmit to disable the submit button, etc...
+  handleUploadStart() {
+    this.setState({ ...this.state, loadingSubmit: true });
   }
   render() {
     return (
@@ -169,6 +174,7 @@ class LineForm extends React.Component {
                 }
                 publicId={this.props.audioPublicId}
                 handleUploadedFile={this.handleUploadedFile}
+                handleUploadStart={this.handleUploadStart}
               />
             </div>
             <Button
