@@ -53,6 +53,7 @@ async function sign(req, res) {
     if (public_id) resObj.public_id = public_id;
     res.json(resObj);
   } catch (e) {
+    console.log("Error in signing: ", e);
     res.status(400).send({ error: e });
   }
 }
