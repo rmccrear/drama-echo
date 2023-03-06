@@ -25,6 +25,7 @@ function unpackDialog(dialog) {
 
 const findYoutubeCode = (url) => {
   // https://www.youtube.com/embed/AnudaIjvumY?start=550
+  if(!url) return undefined;
   const matchForBrowserUrl = url.match(/youtube\.com\/.+v=(\w+)/);
   const matchForShareLink = url.match(/youtu\.be\/(\w+)/);
   if (matchForBrowserUrl) {
