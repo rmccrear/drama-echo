@@ -34,6 +34,7 @@ describe("Test Practice Routes", () => {
     testDialogs = await Dialog.insertMany(dbSeeds.dialogs);
     testPractices = await Practice.insertMany(dbSeeds.practices);
   });
+
   afterEach(async () => {
     testDialogs = undefined;
     testPractices = undefined;

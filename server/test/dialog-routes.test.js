@@ -40,12 +40,14 @@ describe("get Dialogs", () => {
     expect(resp.body[0].title).toBe("First Dialog");
     expect(resp.body[1].title).toBe("Second Dialog");
   });
+
   test("get dialog by id route works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     const firstDialogTitle = testDialogs[0].title;
     expect(resp.body.title).toBe(firstDialogTitle);
   });
+
   test("create dialog route works", async () => {
     const dialogParams = { title: "Created Title", characters: ["J", "A"] };
     const resp = await request(app).post(`/api/v1/dialogs`).send(dialogParams);
@@ -54,6 +56,7 @@ describe("get Dialogs", () => {
     const resp2 = await request(app).get(`/api/v1/dialogs/${new_id}`);
     expect(resp2.body.title).toBe("Created Title");
   });
+
   test("update dialog route works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
     const dialogUpdates = { title: "Updated Title" };
@@ -61,6 +64,7 @@ describe("get Dialogs", () => {
     const resp = await request(app).get(`/api/v1/dialogs/${dialog_id}`);
     expect(resp.body.title).toBe("Updated Title");
   });
+
   test("update dialog route with validation works", async () => {
     const dialog_id = testDialogs[0]._id.toString();
     const dialogUpdates = { title2: "not in schema" };
