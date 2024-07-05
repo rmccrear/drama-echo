@@ -50,3 +50,4 @@ To test this app locally you will also need a MongoDB database available and an 
 This is build as a mono-repo. So you will need to start the react dev server in the `app` directory, as well as the server in the `server` directory.
 
 See the .env-template file in both the `app` and `server` directorys for all the necessary keys.
+
